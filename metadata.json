@@ -1,0 +1,5 @@
+{
+  "name": "Nornia Tools",
+  "description": "A compact browser-based developer toolbox for JSON editing, timestamp conversion, UUID generation, text/code diffing, and quick calculations.",
+  "requestFramePermissions": []
+}
