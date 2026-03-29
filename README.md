@@ -24,6 +24,8 @@
   批量生成 RFC 4122 v4 UUID，并提供多种常用格式。
 - `文本代码对比`
   基于 Monaco Diff Editor 的并排文本/代码对比，支持 `Text / JSON / YAML / Go`。
+- `URL 编解码`
+  实时进行 URL 编码与解码，支持自动识别并快速复制结果。
 - `计算稿纸`
   用于快速书写和计算数学表达式，适合临时草稿计算。
 
@@ -77,6 +79,7 @@ npm run lint
 - `#/timestamp`
 - `#/uuid`
 - `#/text-code-diff`
+- `#/url-codec`
 - `#/calculator`
 
 ## 项目结构

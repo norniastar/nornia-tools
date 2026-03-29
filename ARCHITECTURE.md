@@ -103,6 +103,7 @@ All tool pages live in [`src/components`](/Users/nornia/code/codex/tools/src/com
 - [`TimestampTool.tsx`](/Users/nornia/code/codex/tools/src/components/TimestampTool.tsx)
 - [`UUIDGeneratorTool.tsx`](/Users/nornia/code/codex/tools/src/components/UUIDGeneratorTool.tsx)
 - [`TextCodeDiffTool.tsx`](/Users/nornia/code/codex/tools/src/components/TextCodeDiffTool.tsx)
+- [`URLCodecTool.tsx`](/Users/nornia/code/codex/tools/src/components/URLCodecTool.tsx)
 - [`CalculatorTool.tsx`](/Users/nornia/code/codex/tools/src/components/CalculatorTool.tsx)
 
 ### 共享基础组件与工具

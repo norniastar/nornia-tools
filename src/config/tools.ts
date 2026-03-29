@@ -1,9 +1,10 @@
-import { Calculator, Clock, Code2, FileDiff, Fingerprint, Home } from 'lucide-react';
+import { Calculator, Clock, Code2, FileDiff, Fingerprint, Home, Link2 } from 'lucide-react';
 import type { ToolDefinition, ToolId } from '../types';
 import JSONEditorTool from '../components/JSONEditorTool';
 import TimestampTool from '../components/TimestampTool';
 import UUIDGeneratorTool from '../components/UUIDGeneratorTool';
 import TextCodeDiffTool from '../components/TextCodeDiffTool';
+import URLCodecTool from '../components/URLCodecTool';
 import CalculatorTool from '../components/CalculatorTool';
 
 export const TOOL_DEFINITIONS: ToolDefinition[] = [
@@ -45,6 +46,14 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     icon: FileDiff,
     route: '/text-code-diff',
     component: TextCodeDiffTool,
+  },
+  {
+    id: 'urlCodec',
+    name: 'URL 编解码',
+    description: '实时进行 URL 编码与解码，支持自动识别并快速复制结果。',
+    icon: Link2,
+    route: '/url-codec',
+    component: URLCodecTool,
   },
   {
     id: 'calculator',

@@ -53,6 +53,7 @@ export type ToolId =
   | 'timestamp'
   | 'uuid'
   | 'textCodeDiff'
+  | 'urlCodec'
   | 'calculator'
   | 'newTool';
 ```
