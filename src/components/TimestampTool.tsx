@@ -6,7 +6,6 @@ import { useCopyFeedback } from '../hooks/useCopyFeedback';
 import { useToolDraft } from '../hooks/useToolDraft';
 
 const TIMESTAMP_TOOL_CACHE_KEY = 'timestamp_tool_draft';
-const TIMESTAMP_TOOL_CACHE_TTL = 5 * 60 * 1000;
 
 const TimestampTool = () => {
   const emptyDraft = useMemo(
@@ -22,8 +21,8 @@ const TimestampTool = () => {
   );
   const { initialDraft: cachedDraft, persistDraft } = useToolDraft(
     TIMESTAMP_TOOL_CACHE_KEY,
-    TIMESTAMP_TOOL_CACHE_TTL,
-    emptyDraft
+    emptyDraft,
+    { clearOnReload: true }
   );
   const [unit, setUnit] = useState<'ms' | 's'>(cachedDraft.unit);
   const [timezone, setTimezone] = useState(cachedDraft.timezone);
@@ -227,9 +226,9 @@ const TimestampTool = () => {
       <div className="space-y-3 pr-1">
         <div className="space-y-3">
           {/* Row 1: Date to Timestamp */}
-          <div className="group bg-white border border-slate-200 hover:border-blue-300 transition-all p-4 flex flex-col gap-2 relative">
+          <div className="group rounded-xl bg-white border border-slate-200 hover:border-blue-300 transition-all p-4 flex flex-col gap-2 relative">
             <div className="flex items-center gap-4">
-              <div className="w-8 h-8 bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
+              <div className="w-8 h-8 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
                 01
               </div>
               <div className="flex-1 flex flex-col">
@@ -264,16 +263,16 @@ const TimestampTool = () => {
           </div>
 
           {/* Row 2: Timestamp to Date */}
-          <div className="group bg-white border border-slate-200 hover:border-blue-300 transition-all p-4 flex flex-col gap-2 relative">
+          <div className="group rounded-xl bg-white border border-slate-200 hover:border-blue-300 transition-all p-4 flex flex-col gap-2 relative">
             <div className="flex items-center gap-4">
-              <div className="w-8 h-8 bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
+              <div className="w-8 h-8 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
                 02
               </div>
               <div className="flex-1 flex flex-col">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">时间戳 → (北京) 日期</label>
                 <div className="flex items-center gap-6">
                   <div className="flex-1 max-w-md">
-                    <div className="flex items-center gap-2 bg-white border border-slate-200 p-3 focus-within:border-[#4e45e4] focus-within:ring-1 focus-within:ring-[#4e45e4]/20 transition-all">
+                    <div className="flex items-center gap-2 rounded-lg bg-white border border-slate-200 p-3 focus-within:border-[#4e45e4] focus-within:ring-1 focus-within:ring-[#4e45e4]/20 transition-all">
                       <input 
                         type="text"
                         value={tsToDateInput}
@@ -312,9 +311,9 @@ const TimestampTool = () => {
           </div>
 
           {/* Row 3: Current Timestamp */}
-          <div className="group bg-white border border-slate-200 hover:border-blue-300 transition-all p-6 flex flex-col gap-4 relative">
+          <div className="group rounded-xl bg-white border border-slate-200 hover:border-blue-300 transition-all p-6 flex flex-col gap-4 relative">
             <div className="flex items-center gap-4">
-              <div className="w-8 h-8 bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
+              <div className="w-8 h-8 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
                 03
               </div>
               <div className="flex-1 flex flex-col gap-1">

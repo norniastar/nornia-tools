@@ -182,12 +182,13 @@ Current persistence examples:
 - text/code diff draft
 - calculator draft
 
-Use [`draftCache.ts`](/Users/nornia/code/codex/tools/src/utils/draftCache.ts) for TTL-based draft retention.
+Use [`draftCache.ts`](/Users/nornia/code/codex/tools/src/utils/draftCache.ts) for tool draft retention.
 
 Persistence rules:
 
 - persist only user-entered content or user-selected mode
-- keep TTL explicit
+- allow page-level continuity without persisting one-shot UI state
+- clear drafts on full-page reload when the tool uses reload-clearing behavior
 - clear storage when the persisted content is effectively empty
 - do not persist one-shot UI feedback such as copied icons or temporary error labels
 

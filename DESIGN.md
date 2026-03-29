@@ -35,6 +35,46 @@ This document defines the current UI design conventions for the tools workspace.
 - Secondary background: `bg-slate-50` or `bg-slate-100`
 - Shadows should stay subtle and mostly support hover or hierarchy.
 
+## 圆角分级
+
+Use a small set of radius levels across the project. Do not introduce extra radius values casually.
+
+### 1. 硬边
+
+- `rounded-none`
+- Used for deliberate hard-edge areas such as the sidebar items and the navbar search input.
+
+### 2. 小圆角
+
+- `rounded`
+- Used for tiny labels, tooltip shells, and very small control details.
+
+### 3. 标准控件圆角
+
+- `rounded-md`
+- Used for icon buttons, regular buttons, small input controls, and compact interaction elements.
+
+### 4. 中型容器圆角
+
+- `rounded-lg`
+- Used for segmented controls, status bars, filter bars, dropdown panels, and secondary containers.
+
+### 5. 大工作区圆角
+
+- `rounded-xl`
+- Used for large editor panels, major white work surfaces, overview cards, and other primary containers.
+
+### 使用规则
+
+- Small interactive controls should default to `rounded-md`.
+- Secondary grouped containers should default to `rounded-lg`.
+- Primary work surfaces should default to `rounded-xl`.
+- Use `rounded-full` only for dots or intentionally circular elements, not for standard cards or controls.
+- Navigation areas and work areas use different radius strategies:
+  - Sidebar navigation and other intentional hard-edge navigation surfaces should stay on `rounded-none`.
+  - Main content work areas should follow the layered `rounded-md` / `rounded-lg` / `rounded-xl` scale.
+- Do not force the sidebar tool list to match the card radius used inside tool pages.
+
 ## 主按钮
 
 This is the current reference style for homepage primary CTA buttons such as `开始处理`.
@@ -112,6 +152,23 @@ Rules:
 - Status lines should be short and low-noise.
 - Prefer factual summaries like `共 21 行`.
 - Avoid verbose operational phrases when a shorter status conveys the same information.
+
+## 草稿保留
+
+Draft retention should feel helpful, not sticky.
+
+### 标准模式
+
+- Keep user-entered content when switching between tools inside the app.
+- Clear tool drafts on full-page reload when the tool uses reload-clearing behavior.
+- Do not silently expire drafts based on short TTL timers.
+
+### 使用规则
+
+- Persist only user-entered content and user-selected modes that help continuity.
+- Do not persist derived data, copied state, or temporary status text.
+- Clear storage when the persisted content is effectively empty.
+- Use the same draft behavior across tools unless a tool has a strong product reason to differ.
 
 ## 复制反馈
 

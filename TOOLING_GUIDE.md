@@ -149,7 +149,7 @@ Ask whether the tool benefits from draft retention.
 Use [`src/hooks/useToolDraft.ts`](/Users/nornia/code/codex/tools/src/hooks/useToolDraft.ts) when:
 
 - the tool has user-entered content
-- the content is likely to be revisited within a short time
+- the content is likely to be revisited during the current browser session
 - restoring the draft improves continuity
 
 Rules:
@@ -157,6 +157,8 @@ Rules:
 - persist only user-entered or user-selected values
 - do not persist ephemeral UI state
 - do not persist copy feedback state
+- prefer keeping content across in-app tool switching
+- prefer clearing drafts on full-page reload for temporary tools
 - clear the draft when content is effectively empty
 
 ### 8. 正确接入复制反馈
@@ -229,14 +231,13 @@ import { useToolDraft } from '../hooks/useToolDraft';
 import { useCopyFeedback } from '../hooks/useCopyFeedback';
 
 const NEW_TOOL_CACHE_KEY = 'new_tool_draft';
-const NEW_TOOL_CACHE_TTL = 5 * 60 * 1000;
 
 const NewTool = () => {
   const emptyDraft = useMemo(() => ({ input: '' }), []);
   const { initialDraft, persistDraft } = useToolDraft(
     NEW_TOOL_CACHE_KEY,
-    NEW_TOOL_CACHE_TTL,
-    emptyDraft
+    emptyDraft,
+    { clearOnReload: true }
   );
   const { copyText, copiedKey } = useCopyFeedback<'result'>();
   const [input, setInput] = useState(initialDraft.input);

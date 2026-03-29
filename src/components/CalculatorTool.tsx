@@ -12,14 +12,13 @@ interface CalcRow {
 }
 
 const CALCULATOR_TOOL_CACHE_KEY = 'calculator_tool_draft';
-const CALCULATOR_TOOL_CACHE_TTL = 5 * 60 * 1000;
 
 const CalculatorTool = () => {
   const emptyDraft = useMemo(() => ({ expressions: [] as string[] }), []);
   const { initialDraft: cachedDraft, persistDraft } = useToolDraft(
     CALCULATOR_TOOL_CACHE_KEY,
-    CALCULATOR_TOOL_CACHE_TTL,
-    emptyDraft
+    emptyDraft,
+    { clearOnReload: true }
   );
   const [rows, setRows] = useState<CalcRow[]>(() => {
     const restoredRows = cachedDraft.expressions
@@ -138,10 +137,10 @@ const CalculatorTool = () => {
           {rows.map((row, i) => (
             <div 
               key={row.id} 
-              className="group bg-white border border-slate-200 hover:border-blue-300 transition-all p-4 flex flex-col gap-2 relative"
+              className="group rounded-xl bg-white border border-slate-200 hover:border-blue-300 transition-all p-4 flex flex-col gap-2 relative"
             >
               <div className="flex items-center gap-4 w-full">
-                <div className="w-8 h-8 bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
+                <div className="w-8 h-8 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
                   {String(i + 1).padStart(2, '0')}
                 </div>
                 <input 

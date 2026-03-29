@@ -9,7 +9,9 @@ interface DateTimePickerProps {
 }
 
 const DateTimePicker: React.FC<DateTimePickerProps> = ({ value, onChange, onPreviewChange, placeholder }) => {
+  const TIME_ITEM_HEIGHT = 32;
   const [isOpen, setIsOpen] = useState(false);
+  const [timeColumnSpacerHeight, setTimeColumnSpacerHeight] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const initialValueRef = useRef<string>(value);
 
@@ -38,22 +40,35 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ value, onChange, onPrev
 
   const scrollToValue = (container: HTMLDivElement | null, value: number) => {
     if (!container) return;
-    const itemHeight = 32; // Height of each time item (py-2 is 8px top/bottom, text-xs is 12px, total ~32px)
-    container.scrollTo({
-      top: value * itemHeight,
-      behavior: 'smooth'
+
+    const target = container.querySelector<HTMLElement>(`[data-time-value="${value}"]`);
+    if (!target) return;
+
+    target.scrollIntoView({
+      block: 'start',
+      behavior: 'smooth',
     });
+  };
+
+  const syncTimeColumnSpacer = () => {
+    const container = hourRef.current ?? minuteRef.current ?? secondRef.current;
+    if (!container) return;
+
+    setTimeColumnSpacerHeight(Math.max(container.clientHeight - TIME_ITEM_HEIGHT, 0));
   };
 
   // Scroll to current values when opening
   useEffect(() => {
     if (isOpen) {
       initialValueRef.current = value;
-      setTimeout(() => {
+      requestAnimationFrame(() => {
+        syncTimeColumnSpacer();
+        requestAnimationFrame(() => {
         scrollToValue(hourRef.current, selectedDate.getHours());
         scrollToValue(minuteRef.current, selectedDate.getMinutes());
         scrollToValue(secondRef.current, selectedDate.getSeconds());
-      }, 100);
+        });
+      });
     }
   }, [isOpen]);
 
@@ -282,36 +297,42 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ value, onChange, onPrev
                   {Array.from({ length: 24 }).map((_, i) => (
                     <button
                       key={i}
+                      data-time-value={i}
                       onClick={() => selectTime('h', i)}
                       className={`w-full text-xs py-2 transition-colors ${selectedDate.getHours() === i ? 'bg-[#4e45e4] text-white font-bold' : 'text-slate-600 hover:bg-slate-50'}`}
                     >
                       {String(i).padStart(2, '0')}
                     </button>
                   ))}
+                  <div aria-hidden="true" style={{ height: timeColumnSpacerHeight }} />
                 </div>
                 {/* Minutes */}
                 <div ref={minuteRef} className="flex-1 overflow-y-auto scrollbar-hide hover:scrollbar-default border-r border-slate-50 py-1">
                   {Array.from({ length: 60 }).map((_, i) => (
                     <button
                       key={i}
+                      data-time-value={i}
                       onClick={() => selectTime('m', i)}
                       className={`w-full text-xs py-2 transition-colors ${selectedDate.getMinutes() === i ? 'bg-[#4e45e4] text-white font-bold' : 'text-slate-600 hover:bg-slate-50'}`}
                     >
                       {String(i).padStart(2, '0')}
                     </button>
                   ))}
+                  <div aria-hidden="true" style={{ height: timeColumnSpacerHeight }} />
                 </div>
                 {/* Seconds */}
                 <div ref={secondRef} className="flex-1 overflow-y-auto scrollbar-hide hover:scrollbar-default py-1">
                   {Array.from({ length: 60 }).map((_, i) => (
                     <button
                       key={i}
+                      data-time-value={i}
                       onClick={() => selectTime('s', i)}
                       className={`w-full text-xs py-2 transition-colors ${selectedDate.getSeconds() === i ? 'bg-[#4e45e4] text-white font-bold' : 'text-slate-600 hover:bg-slate-50'}`}
                     >
                       {String(i).padStart(2, '0')}
                     </button>
                   ))}
+                  <div aria-hidden="true" style={{ height: timeColumnSpacerHeight }} />
                 </div>
               </div>
             </div>

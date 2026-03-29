@@ -17,7 +17,6 @@ import { useCopyFeedback } from '../hooks/useCopyFeedback';
 import { useToolDraft } from '../hooks/useToolDraft';
 
 const JSON_EDITOR_CACHE_KEY = 'json_editor_draft';
-const JSON_EDITOR_CACHE_TTL = 5 * 60 * 1000;
 
 // --- Sub-component ---
 
@@ -155,8 +154,8 @@ const JSONEditorTool = () => {
   const emptyDraft = useMemo(() => ({ code: '', filter: '' }), []);
   const { initialDraft: cachedDraft, persistDraft } = useToolDraft(
     JSON_EDITOR_CACHE_KEY,
-    JSON_EDITOR_CACHE_TTL,
-    emptyDraft
+    emptyDraft,
+    { clearOnReload: true }
   );
   const [code, setCode] = useState(cachedDraft.code);
   const [resultCode, setResultCode] = useState('');
@@ -328,9 +327,9 @@ const JSONEditorTool = () => {
           )}
         </div>
 
-        <div className="flex gap-4 overflow-hidden h-[440px] lg:h-[460px]">
+        <div className="flex h-[634px] lg:h-[662px] gap-4 overflow-hidden">
         {/* Original Data */}
-        <div className={`flex-1 bg-white border border-slate-200 shadow-sm flex overflow-hidden transition-all ${resultCode ? 'w-1/2' : 'w-full'}`}>
+        <div className={`flex-1 rounded-xl bg-white border border-slate-200 shadow-sm flex overflow-hidden transition-all ${resultCode ? 'w-1/2' : 'w-full'}`}>
           <div className="flex-1 flex flex-col overflow-hidden">
             <JSONEditorComponent ref={editorRef} value={code} onChange={setCode} />
           </div>
@@ -338,9 +337,9 @@ const JSONEditorTool = () => {
 
         {/* Filtered Result */}
         {resultCode && (
-          <div className="flex-1 bg-white border border-slate-200 shadow-sm flex overflow-hidden w-1/2 animate-in fade-in slide-in-from-right-4 duration-300 relative">
+          <div className="flex-1 rounded-xl bg-white border border-slate-200 shadow-sm flex overflow-hidden w-1/2 animate-in fade-in slide-in-from-right-4 duration-300 relative">
             <div className="absolute top-2 right-4 z-10 pointer-events-none">
-              <span className="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded border border-blue-100 uppercase tracking-wider">
+              <span className="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100 uppercase tracking-wider">
                 只读模式
               </span>
             </div>
@@ -352,7 +351,7 @@ const JSONEditorTool = () => {
         </div>
       </div>
 
-      <div className="p-4 bg-slate-100 border border-slate-200 flex items-center gap-4">
+      <div className="rounded-lg p-4 bg-slate-100 border border-slate-200 flex items-center gap-4">
         <div className="flex items-center shrink-0">
           <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">this.data</span>
         </div>
@@ -361,7 +360,7 @@ const JSONEditorTool = () => {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
           placeholder={`示例: ${EXAMPLE_FILTER}`}
-          className="flex-1 bg-white border-none rounded-none px-4 py-2 text-xs font-mono focus:ring-1 focus:ring-[#0057c1] placeholder:text-slate-400"
+          className="flex-1 bg-white border-none rounded-md px-4 py-2 text-xs font-mono focus:ring-1 focus:ring-[#0057c1] placeholder:text-slate-400"
         />
       </div>
     </ToolPage>

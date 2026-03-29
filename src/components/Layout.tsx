@@ -1,7 +1,6 @@
 import React from 'react';
 import { Search, ChevronRight, ChevronLeft } from 'lucide-react';
 import { ToolDefinition, ToolId } from '../types';
-import Tooltip from './Tooltip';
 
 export const Navbar = ({ searchQuery, setSearchQuery, onLogoClick }: { searchQuery: string, setSearchQuery: (val: string) => void, onLogoClick: () => void }) => (
   <nav className="sticky top-0 w-full z-50 bg-white border-b border-slate-200 h-14">
@@ -30,7 +29,7 @@ export const Navbar = ({ searchQuery, setSearchQuery, onLogoClick }: { searchQue
             placeholder="搜索工具..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="bg-slate-100 border-none rounded-none pl-10 pr-4 py-1.5 text-sm w-64 focus:ring-1 focus:ring-[#0057c1]"
+            className="bg-slate-100 border border-slate-200 rounded-md pl-10 pr-4 py-1.5 text-sm w-64 focus:ring-1 focus:ring-[#0057c1] focus:border-[#0057c1]"
           />
         </div>
       </div>
@@ -86,9 +85,9 @@ export const Sidebar = ({ activeTool, setActiveTool, tools, isCollapsed, setIsCo
   return (
     <aside 
       style={{ width: isCollapsed ? 64 : width }}
-      className={`hidden lg:flex self-stretch border-r border-slate-200 bg-[#f8f9ff] flex-col ${isResizingState ? '' : 'transition-[width] duration-300 ease-in-out'} group relative`}
+      className={`hidden lg:flex self-stretch border-r border-slate-200 bg-[#f8f9ff] flex-col ${isCollapsed ? 'overflow-visible' : 'overflow-hidden'} ${isResizingState ? '' : 'transition-[width] duration-300 ease-in-out'} group relative`}
     >
-      <div className="flex-1 flex flex-col p-3 overflow-hidden">
+      <div className={`flex-1 flex flex-col p-3 ${isCollapsed ? 'overflow-visible' : 'overflow-hidden'}`}>
         <div className={`mb-6 px-2 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
           {!isCollapsed && <p className="text-[10px] text-slate-400 font-mono">v0.0.1</p>}
           <button 
@@ -104,22 +103,14 @@ export const Sidebar = ({ activeTool, setActiveTool, tools, isCollapsed, setIsCo
               const button = (
                 <button 
                   onClick={() => setActiveTool(tool.id)}
-                  className={`flex items-center w-full ${isCollapsed ? 'justify-center' : 'gap-3'} px-3 py-2 transition-all rounded-none ${activeTool === tool.id ? 'bg-white text-[#0057c1] shadow-sm border border-slate-200' : 'text-slate-500 hover:bg-slate-200/50'}`}
+                  className={`flex items-center w-full ${isCollapsed ? 'justify-center' : 'gap-3'} px-3 py-2 transition-all rounded-none ${activeTool === tool.id ? 'bg-white text-[#0057c1] border border-slate-200' : 'text-slate-500 hover:bg-slate-200/50'}`}
                 >
                   <tool.icon className="w-5 h-5 shrink-0" />
                   {!isCollapsed && <span className="text-sm font-medium truncate">{tool.name}</span>}
                 </button>
               );
 
-              return (
-                <React.Fragment key={tool.id}>
-                  {isCollapsed ? (
-                    <Tooltip text={tool.name} position="right">
-                      {button}
-                    </Tooltip>
-                  ) : button}
-                </React.Fragment>
-              );
+              return <React.Fragment key={tool.id}>{button}</React.Fragment>;
             })}
           </nav>
       </div>

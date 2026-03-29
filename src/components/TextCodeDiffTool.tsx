@@ -14,7 +14,6 @@ interface DiffSummary {
 }
 
 const TEXT_CODE_DIFF_CACHE_KEY = 'text_code_diff_draft';
-const TEXT_CODE_DIFF_CACHE_TTL = 5 * 60 * 1000;
 
 const normalizeLineEndings = (text: string) => text.replace(/\r\n/g, '\n');
 
@@ -96,8 +95,8 @@ const TextCodeDiffTool = () => {
   );
   const { initialDraft: cachedDraft, persistDraft } = useToolDraft(
     TEXT_CODE_DIFF_CACHE_KEY,
-    TEXT_CODE_DIFF_CACHE_TTL,
-    emptyDraft
+    emptyDraft,
+    { clearOnReload: true }
   );
   const [language, setLanguage] = useState<Language>(cachedDraft.language);
   const [leftInput, setLeftInput] = useState(cachedDraft.leftInput);
@@ -106,6 +105,9 @@ const TextCodeDiffTool = () => {
   const [statusMessage, setStatusMessage] = useState('共 1 行');
   const [statusTone, setStatusTone] = useState<'info' | 'error'>('info');
   const diffEditorRef = useRef<any>(null);
+  const leftEditorRef = useRef<any>(null);
+  const rightEditorRef = useRef<any>(null);
+  const isApplyingProgrammaticChange = useRef(false);
   const hasManualLanguageSelection = useRef(cachedDraft.hasManualLanguageSelection);
   const hasAutoDetectedLanguage = useRef(cachedDraft.hasAutoDetectedLanguage);
   const draftState = useMemo(
@@ -144,10 +146,19 @@ const TextCodeDiffTool = () => {
 
   const handleFormat = () => {
     try {
-      setLeftInput(current => formatContent(current, language));
-      setRightInput(current => formatContent(current, language));
+      const nextLeft = formatContent(leftEditorRef.current?.getValue?.() ?? leftInput, language);
+      const nextRight = formatContent(rightEditorRef.current?.getValue?.() ?? rightInput, language);
+
+      isApplyingProgrammaticChange.current = true;
+      leftEditorRef.current?.setValue?.(nextLeft);
+      rightEditorRef.current?.setValue?.(nextRight);
+      setLeftInput(nextLeft);
+      setRightInput(nextRight);
       setStatusMessage(language === 'json' ? 'JSON 已格式化。' : `${getLanguageLabel(language)} 已完成基础整理。`);
       setStatusTone('info');
+      queueMicrotask(() => {
+        isApplyingProgrammaticChange.current = false;
+      });
     } catch (error) {
       const message = error instanceof Error ? error.message : '格式化失败';
       setStatusMessage(`格式化失败：${message}`);
@@ -158,12 +169,18 @@ const TextCodeDiffTool = () => {
   const handleClear = () => {
     hasManualLanguageSelection.current = false;
     hasAutoDetectedLanguage.current = false;
+    isApplyingProgrammaticChange.current = true;
+    leftEditorRef.current?.setValue?.('');
+    rightEditorRef.current?.setValue?.('');
     setLanguage('text');
     setLeftInput('');
     setRightInput('');
     setSummary(createEmptySummary());
     setStatusMessage('已清空左右输入内容。');
     setStatusTone('info');
+    queueMicrotask(() => {
+      isApplyingProgrammaticChange.current = false;
+    });
   };
 
   const updateSummaryFromEditor = () => {
@@ -197,14 +214,18 @@ const TextCodeDiffTool = () => {
 
   const handleEditorMount = (editor: any, monaco: any) => {
     diffEditorRef.current = editor;
+    leftEditorRef.current = editor.getOriginalEditor?.();
+    rightEditorRef.current = editor.getModifiedEditor?.();
 
     monaco.editor.setTheme('vs');
     updateSummaryFromEditor();
     editor.getOriginalEditor?.().onDidChangeModelContent?.(() => {
+      if (isApplyingProgrammaticChange.current) return;
       const nextValue = editor.getOriginalEditor().getValue();
       setLeftInput(nextValue);
     });
     editor.getModifiedEditor?.().onDidChangeModelContent?.(() => {
+      if (isApplyingProgrammaticChange.current) return;
       const nextValue = editor.getModifiedEditor().getValue();
       setRightInput(nextValue);
     });
@@ -284,13 +305,13 @@ const TextCodeDiffTool = () => {
           <span className={`text-sm ${statusTone === 'error' ? 'text-red-500' : 'text-slate-500'}`}>{statusMessage}</span>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-blue-600 bg-blue-50 px-2 py-1 rounded">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-blue-600 bg-blue-50 px-2 py-1 rounded-md">
             新增 {summary.added}
           </span>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-red-600 bg-red-50 px-2 py-1 rounded">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-red-600 bg-red-50 px-2 py-1 rounded-md">
             删除 {summary.removed}
           </span>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-amber-700 bg-amber-50 px-2 py-1 rounded">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-amber-700 bg-amber-50 px-2 py-1 rounded-md">
             修改 {summary.modified}
           </span>
         </div>
@@ -309,8 +330,8 @@ const TextCodeDiffTool = () => {
         <DiffEditor
           height="100%"
           language={getMonacoLanguage(language)}
-          original={leftInput}
-          modified={rightInput}
+          original={cachedDraft.leftInput}
+          modified={cachedDraft.rightInput}
           onMount={handleEditorMount}
           options={editorOptions}
           loading={<div className="h-full flex items-center justify-center text-sm text-slate-400">正在加载 Monaco 编辑器…</div>}
