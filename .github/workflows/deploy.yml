@@ -58,7 +58,7 @@ jobs:
       - name: Install SSH key
         run: |
           install -m 700 -d "$HOME/.ssh"
-          printf '%s' '${{ secrets.VPS_SSH_KEY }}' > "$HOME/.ssh/id_ed25519"
+          printf '%s\n' '${{ secrets.VPS_SSH_KEY }}' | tr -d '\r' > "$HOME/.ssh/id_ed25519"
           chmod 600 "$HOME/.ssh/id_ed25519"
 
       - name: Trust VPS host key
