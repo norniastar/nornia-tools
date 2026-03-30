@@ -3,6 +3,8 @@ set -euo pipefail
 
 IMAGE_REF="${1:?usage: deploy.sh <image-ref>}"
 ENV_FILE="/opt/nornia-tools/deploy.env"
+LOG_DIR="/opt/nornia-tools/logs"
+LOG_FILE="${LOG_DIR}/deploy.log"
 
 if [ -f "${ENV_FILE}" ]; then
   set -a
@@ -16,6 +18,14 @@ HOST_PORT="${HOST_PORT:-18080}"
 GHCR_USERNAME="${GHCR_USERNAME:?set GHCR_USERNAME}"
 GHCR_TOKEN="${GHCR_TOKEN:?set GHCR_TOKEN}"
 
+mkdir -p "${LOG_DIR}"
+timestamp="$(date '+%Y-%m-%d %H:%M:%S %z')"
+
+log() {
+  printf '[%s] %s\n' "${timestamp}" "$1" >> "${LOG_FILE}"
+}
+
+log "start deploy image=${IMAGE_REF}"
 echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GHCR_USERNAME}" --password-stdin
 docker pull "${IMAGE_REF}"
 
@@ -30,3 +40,4 @@ docker run -d \
   "${IMAGE_REF}"
 
 docker image prune -f
+log "deploy success image=${IMAGE_REF} app=${APP_NAME} host_port=${HOST_PORT}"

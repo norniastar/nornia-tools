@@ -54,6 +54,7 @@ EOF
 - 如果镜像包是私有的，VPS 必须登录 GHCR 才能拉取
 - 如果你把包改成公开，理论上可以省略登录，但通常不建议一开始就这么做
 - `deploy.sh` 会自动加载 `/opt/nornia-tools/deploy.env`
+- `deploy.sh` 会把部署时间和镜像 tag 记录到 `/opt/nornia-tools/logs/deploy.log`
 
 ## 第 3 步：给 GitHub Actions 配置 Secrets
 
