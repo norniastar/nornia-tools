@@ -20,6 +20,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate deployment settings
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          test -n "${VPS_HOST}" || { echo "Missing secret: VPS_HOST" >&2; exit 1; }
+          test -n "${VPS_USER}" || { echo "Missing secret: VPS_USER" >&2; exit 1; }
+          test -n "${VPS_SSH_KEY}" || { echo "Missing secret: VPS_SSH_KEY" >&2; exit 1; }
+
       - name: Set image coordinates
         id: image
         run: |
@@ -45,17 +55,17 @@ jobs:
 
       - name: Install SSH key
         run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
+          install -m 700 -d "$HOME/.ssh"
+          printf '%s' '${{ secrets.VPS_SSH_KEY }}' > "$HOME/.ssh/id_ed25519"
+          chmod 600 "$HOME/.ssh/id_ed25519"
 
       - name: Trust VPS host key
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_PORT: ${{ secrets.VPS_PORT }}
         run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -p "${VPS_PORT:-22}" -H "${VPS_HOST}" >> ~/.ssh/known_hosts
+          install -m 700 -d "$HOME/.ssh"
+          ssh-keyscan -p "${VPS_PORT:-22}" -H "${VPS_HOST}" >> "$HOME/.ssh/known_hosts"
 
       - name: Trigger VPS deployment
         env:
@@ -66,4 +76,4 @@ jobs:
           IMAGE_REF: ${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.sha_tag }}
         run: |
           deploy_script="${VPS_DEPLOY_SCRIPT:-/opt/nornia-tools/deploy.sh}"
-          ssh -i ~/.ssh/id_ed25519 -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" "${deploy_script} '${IMAGE_REF}'"
+          ssh -i "$HOME/.ssh/id_ed25519" -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" "${deploy_script} '${IMAGE_REF}'"
