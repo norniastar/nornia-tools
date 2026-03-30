@@ -22,12 +22,14 @@ jobs:
 
       - name: Validate deployment settings
         env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST || vars.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER || vars.VPS_USER }}
+          VPS_PORT: ${{ secrets.VPS_PORT || vars.VPS_PORT }}
           VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
         run: |
-          test -n "${VPS_HOST}" || { echo "Missing secret: VPS_HOST" >&2; exit 1; }
-          test -n "${VPS_USER}" || { echo "Missing secret: VPS_USER" >&2; exit 1; }
+          test -n "${VPS_HOST}" || { echo "Missing deployment setting: VPS_HOST" >&2; exit 1; }
+          test -n "${VPS_USER}" || { echo "Missing deployment setting: VPS_USER" >&2; exit 1; }
+          test -n "${VPS_PORT}" || { echo "Missing deployment setting: VPS_PORT" >&2; exit 1; }
           test -n "${VPS_SSH_KEY}" || { echo "Missing secret: VPS_SSH_KEY" >&2; exit 1; }
 
       - name: Set image coordinates
@@ -61,17 +63,17 @@ jobs:
 
       - name: Trust VPS host key
         env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_HOST: ${{ secrets.VPS_HOST || vars.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT || vars.VPS_PORT }}
         run: |
           install -m 700 -d "$HOME/.ssh"
           ssh-keyscan -p "${VPS_PORT:-22}" -H "${VPS_HOST}" >> "$HOME/.ssh/known_hosts"
 
       - name: Trigger VPS deployment
         env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST || vars.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT || vars.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER || vars.VPS_USER }}
           VPS_DEPLOY_SCRIPT: ${{ vars.VPS_DEPLOY_SCRIPT }}
           IMAGE_REF: ${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.sha_tag }}
         run: |
