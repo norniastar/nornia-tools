@@ -36,9 +36,12 @@ jobs:
         id: image
         run: |
           image_repo="$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')"
+          version="$(node -p "require('./package.json').version")"
+          short_sha="$(printf '%s' "${GITHUB_SHA}" | cut -c1-7)"
           echo "repo=${image_repo}" >> "$GITHUB_OUTPUT"
           echo "sha_tag=sha-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
           echo "main_tag=main" >> "$GITHUB_OUTPUT"
+          echo "version_tag=${version}-${short_sha}" >> "$GITHUB_OUTPUT"
 
       - name: Log in to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login "${{ env.REGISTRY }}" -u "${{ github.actor }}" --password-stdin
@@ -48,12 +51,14 @@ jobs:
           docker build \
             -t "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.sha_tag }}" \
             -t "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.main_tag }}" \
+            -t "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.version_tag }}" \
             .
 
       - name: Push image
         run: |
           docker push "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.sha_tag }}"
           docker push "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.main_tag }}"
+          docker push "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.version_tag }}"
 
       - name: Install SSH key
         run: |
