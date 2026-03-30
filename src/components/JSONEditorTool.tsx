@@ -268,7 +268,7 @@ const JSONEditorTool = () => {
   };
 
   return (
-    <ToolPage>
+    <ToolPage fullHeight>
       <ToolHeader
         title="JSON 编辑器"
         actions={
@@ -315,7 +315,7 @@ const JSONEditorTool = () => {
         }
       />
 
-      <div className="grid grid-cols-1 gap-2">
+      <div className="flex flex-col gap-2 flex-1 min-h-0">
         <div className={`grid gap-4 ${resultCode ? 'md:grid-cols-2' : 'grid-cols-1'}`}>
           <div className="px-4">
             <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">输入</div>
@@ -327,7 +327,7 @@ const JSONEditorTool = () => {
           )}
         </div>
 
-        <div className="flex h-[634px] lg:h-[662px] gap-4 overflow-hidden">
+        <div className="flex flex-1 min-h-[440px] lg:min-h-[460px] gap-4 overflow-hidden">
         {/* Original Data */}
         <div className={`flex-1 rounded-xl bg-white border border-slate-200 shadow-sm flex overflow-hidden transition-all ${resultCode ? 'w-1/2' : 'w-full'}`}>
           <div className="flex-1 flex flex-col overflow-hidden">

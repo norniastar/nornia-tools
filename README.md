@@ -76,6 +76,8 @@ npm run lint
 
 - [DEPLOY.md](./DEPLOY.md)
 
+当前 VPS 部署脚本默认从 `/opt/nornia-tools/deploy.env` 读取部署变量。
+
 ## 路由
 
 支持以下 hash 路由：

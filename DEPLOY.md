@@ -36,14 +36,16 @@ sudo cp deploy/remote-deploy.sh.example /opt/nornia-tools/deploy.sh
 sudo chmod +x /opt/nornia-tools/deploy.sh
 ```
 
-然后在 VPS 上为脚本准备环境变量。推荐放到 systemd 环境文件或当前用户 shell 配置中，至少包括：
+然后创建环境文件：
 
 ```bash
-export GHCR_USERNAME="<your-github-username>"
-export GHCR_TOKEN="<github-token-with-read-packages>"
-export APP_NAME="nornia-tools"
-export HOST_PORT="80"
-export APP_PORT="80"
+sudo tee /opt/nornia-tools/deploy.env >/dev/null <<'EOF'
+GHCR_USERNAME="<your-github-username>"
+GHCR_TOKEN="<github-token-with-read-packages>"
+APP_NAME="nornia-tools"
+HOST_PORT="18080"
+APP_PORT="80"
+EOF
 ```
 
 说明：
@@ -51,6 +53,7 @@ export APP_PORT="80"
 - `GHCR_TOKEN` 需要有 `read:packages` 权限
 - 如果镜像包是私有的，VPS 必须登录 GHCR 才能拉取
 - 如果你把包改成公开，理论上可以省略登录，但通常不建议一开始就这么做
+- `deploy.sh` 会自动加载 `/opt/nornia-tools/deploy.env`
 
 ## 第 3 步：给 GitHub Actions 配置 Secrets
 

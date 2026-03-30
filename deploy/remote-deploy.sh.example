@@ -2,10 +2,17 @@
 set -euo pipefail
 
 IMAGE_REF="${1:?usage: deploy.sh <image-ref>}"
+ENV_FILE="/opt/nornia-tools/deploy.env"
+
+if [ -f "${ENV_FILE}" ]; then
+  set -a
+  . "${ENV_FILE}"
+  set +a
+fi
 
 APP_NAME="${APP_NAME:-nornia-tools}"
 APP_PORT="${APP_PORT:-80}"
-HOST_PORT="${HOST_PORT:-80}"
+HOST_PORT="${HOST_PORT:-18080}"
 GHCR_USERNAME="${GHCR_USERNAME:?set GHCR_USERNAME}"
 GHCR_TOKEN="${GHCR_TOKEN:?set GHCR_TOKEN}"
 
