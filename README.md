@@ -70,6 +70,12 @@ npm run dev
 npm run lint
 ```
 
+## 自动部署
+
+部署说明已经拆到独立文件，部署完成后你可以直接删除它：
+
+- [DEPLOY.md](./DEPLOY.md)
+
 ## 路由
 
 支持以下 hash 路由：

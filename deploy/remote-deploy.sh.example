@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+IMAGE_REF="${1:?usage: deploy.sh <image-ref>}"
+
+APP_NAME="${APP_NAME:-nornia-tools}"
+APP_PORT="${APP_PORT:-80}"
+HOST_PORT="${HOST_PORT:-80}"
+GHCR_USERNAME="${GHCR_USERNAME:?set GHCR_USERNAME}"
+GHCR_TOKEN="${GHCR_TOKEN:?set GHCR_TOKEN}"
+
+echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GHCR_USERNAME}" --password-stdin
+docker pull "${IMAGE_REF}"
+
+if docker ps -a --format '{{.Names}}' | grep -Fxq "${APP_NAME}"; then
+  docker rm -f "${APP_NAME}"
+fi
+
+docker run -d \
+  --name "${APP_NAME}" \
+  --restart unless-stopped \
+  -p "${HOST_PORT}:${APP_PORT}" \
+  "${IMAGE_REF}"
+
+docker image prune -f

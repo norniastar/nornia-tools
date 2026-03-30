@@ -1,0 +1,69 @@
+name: Build And Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set image coordinates
+        id: image
+        run: |
+          image_repo="$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')"
+          echo "repo=${image_repo}" >> "$GITHUB_OUTPUT"
+          echo "sha_tag=sha-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+          echo "main_tag=main" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login "${{ env.REGISTRY }}" -u "${{ github.actor }}" --password-stdin
+
+      - name: Build image
+        run: |
+          docker build \
+            -t "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.sha_tag }}" \
+            -t "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.main_tag }}" \
+            .
+
+      - name: Push image
+        run: |
+          docker push "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.sha_tag }}"
+          docker push "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.main_tag }}"
+
+      - name: Install SSH key
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+      - name: Trust VPS host key
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p "${VPS_PORT:-22}" -H "${VPS_HOST}" >> ~/.ssh/known_hosts
+
+      - name: Trigger VPS deployment
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_DEPLOY_SCRIPT: ${{ vars.VPS_DEPLOY_SCRIPT }}
+          IMAGE_REF: ${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.sha_tag }}
+        run: |
+          deploy_script="${VPS_DEPLOY_SCRIPT:-/opt/nornia-tools/deploy.sh}"
+          ssh -i ~/.ssh/id_ed25519 -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" "${deploy_script} '${IMAGE_REF}'"
