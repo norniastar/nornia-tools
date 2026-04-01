@@ -345,6 +345,14 @@ const TextCodeDiffTool = () => {
     rightEditorRef.current = editor.getModifiedEditor?.();
 
     monaco.editor.setTheme('vs');
+    leftEditorRef.current?.updateOptions?.({
+      wordWrap: 'off',
+      scrollBeyondLastLine: false,
+    });
+    rightEditorRef.current?.updateOptions?.({
+      wordWrap: 'off',
+      scrollBeyondLastLine: false,
+    });
     updateSummaryFromEditor();
     editor.getOriginalEditor?.().onDidChangeModelContent?.(() => {
       if (isApplyingProgrammaticChange.current) return;
@@ -371,12 +379,12 @@ const TextCodeDiffTool = () => {
       fontLigatures: true,
       lineNumbers: 'on' as const,
       scrollBeyondLastLine: false,
-      wordWrap: 'on' as const,
+      wordWrap: 'off' as const,
       automaticLayout: true,
       glyphMargin: false,
       folding: true,
       renderOverviewRuler: false,
-      diffWordWrap: 'on' as const,
+      diffWordWrap: 'off' as const,
       ignoreTrimWhitespace: false,
       overviewRulerBorder: false,
       rulers: [],
