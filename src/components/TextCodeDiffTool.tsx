@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { FileDiff, RefreshCw, Trash2 } from 'lucide-react';
+import { ArrowUpAZ, FileDiff, RefreshCw, Trash2 } from 'lucide-react';
 import { DiffEditor } from '@monaco-editor/react';
+import YAML from 'yaml';
 import Tooltip from './Tooltip';
 import { ToolHeader, ToolPage } from './ToolPage';
 import { useToolDraft } from '../hooks/useToolDraft';
@@ -74,6 +75,101 @@ const formatContent = (value: string, language: Language) => {
     .split('\n')
     .map(line => line.replace(/\s+$/g, ''))
     .join('\n');
+};
+
+const sortObjectKeysDeep = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value.map(item => sortObjectKeysDeep(item));
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.keys(value as Record<string, unknown>)
+      .sort((left, right) => left.localeCompare(right, 'zh-Hans-CN', { sensitivity: 'base' }))
+      .reduce<Record<string, unknown>>((accumulator, key) => {
+        accumulator[key] = sortObjectKeysDeep((value as Record<string, unknown>)[key]);
+        return accumulator;
+      }, {});
+  }
+
+  return value;
+};
+
+const sortLines = (value: string) =>
+  normalizeLineEndings(value)
+    .split('\n')
+    .sort((left, right) => {
+      const leftKey = left.trimStart();
+      const rightKey = right.trimStart();
+      return leftKey.localeCompare(rightKey, 'zh-Hans-CN', { sensitivity: 'base' }) || left.localeCompare(right, 'zh-Hans-CN', { sensitivity: 'base' });
+    })
+    .join('\n');
+
+const sortContent = (
+  value: string,
+  language: Language
+): {
+  value: string;
+  usedFallback: boolean;
+} => {
+  if (!value.trim()) {
+    return {
+      value: '',
+      usedFallback: false,
+    };
+  }
+
+  if (language === 'json') {
+    try {
+      const parsed = JSON.parse(value);
+
+      if (!parsed || typeof parsed !== 'object') {
+        return {
+          value: sortLines(value),
+          usedFallback: true,
+        };
+      }
+
+      return {
+        value: JSON.stringify(sortObjectKeysDeep(parsed), null, 2),
+        usedFallback: false,
+      };
+    } catch {
+      return {
+        value: sortLines(value),
+        usedFallback: true,
+      };
+    }
+  }
+
+  if (language === 'yaml') {
+    const document = YAML.parseDocument(value);
+
+    if (document.errors.length > 0) {
+      return {
+        value: sortLines(value),
+        usedFallback: true,
+      };
+    }
+
+    const parsed = document.toJS();
+
+    if (!parsed || typeof parsed !== 'object') {
+      return {
+        value: sortLines(value),
+        usedFallback: true,
+      };
+    }
+
+    return {
+      value: YAML.stringify(sortObjectKeysDeep(parsed)).trimEnd(),
+      usedFallback: false,
+    };
+  }
+
+  return {
+    value: sortLines(value),
+    usedFallback: false,
+  };
 };
 
 const createEmptySummary = (): DiffSummary => ({
@@ -162,6 +258,37 @@ const TextCodeDiffTool = () => {
     } catch (error) {
       const message = error instanceof Error ? error.message : '格式化失败';
       setStatusMessage(`格式化失败：${message}`);
+      setStatusTone('error');
+    }
+  };
+
+  const handleSort = () => {
+    try {
+      const leftSorted = sortContent(leftEditorRef.current?.getValue?.() ?? leftInput, language);
+      const rightSorted = sortContent(rightEditorRef.current?.getValue?.() ?? rightInput, language);
+      const nextLeft = leftSorted.value;
+      const nextRight = rightSorted.value;
+      const usedFallback = leftSorted.usedFallback || rightSorted.usedFallback;
+
+      isApplyingProgrammaticChange.current = true;
+      leftEditorRef.current?.setValue?.(nextLeft);
+      rightEditorRef.current?.setValue?.(nextRight);
+      setLeftInput(nextLeft);
+      setRightInput(nextRight);
+      if (usedFallback && language === 'json') {
+        setStatusMessage('输入不是有效的结构化 JSON，已按逐行排序。');
+      } else if (usedFallback && language === 'yaml') {
+        setStatusMessage('输入不是有效的结构化 YAML，已按逐行排序。');
+      } else {
+        setStatusMessage(`${getLanguageLabel(language)} 已完成排序。`);
+      }
+      setStatusTone('info');
+      queueMicrotask(() => {
+        isApplyingProgrammaticChange.current = false;
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : '排序失败';
+      setStatusMessage(`排序失败：${message}`);
       setStatusTone('error');
     }
   };
@@ -289,6 +416,11 @@ const TextCodeDiffTool = () => {
           <Tooltip text="重新格式化">
             <button onClick={handleFormat} className="p-2 text-slate-500 hover:bg-slate-100 transition-colors rounded-md">
               <RefreshCw className="w-5 h-5" />
+            </button>
+          </Tooltip>
+          <Tooltip text="排序左右内容">
+            <button onClick={handleSort} className="p-2 text-slate-500 hover:bg-slate-100 transition-colors rounded-md">
+              <ArrowUpAZ className="w-5 h-5" />
             </button>
           </Tooltip>
           <Tooltip text="清除全部">
