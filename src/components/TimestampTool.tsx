@@ -7,6 +7,8 @@ import { useToolDraft } from '../hooks/useToolDraft';
 
 const TIMESTAMP_TOOL_CACHE_KEY = 'timestamp_tool_draft';
 
+const formatRowCopyText = (left: string, right: string | number) => `${left || '-'} -> ${right || '-'}`;
+
 const TimestampTool = () => {
   const emptyDraft = useMemo(
     () => ({
@@ -170,6 +172,9 @@ const TimestampTool = () => {
     setTsToDateInput('');
   };
 
+  const dateToTimestampResult = dateToTimestamp(confirmedDateToTs);
+  const timestampToDateResult = timestampToDate(tsToDateInput);
+
   return (
     <ToolPage>
       <ToolHeader
@@ -231,6 +236,13 @@ const TimestampTool = () => {
         <div className="space-y-3">
           {/* Row 1: Date to Timestamp */}
           <div className="group rounded-xl bg-white border border-slate-200 hover:border-blue-300 transition-all p-4 flex flex-col gap-2 relative">
+            <button
+              onClick={() => copyText(formatRowCopyText(confirmedDateToTs, dateToTimestampResult), 'dateToTsRow')}
+              className={`absolute top-3 right-3 p-1.5 rounded-md transition-colors ${copiedKey === 'dateToTsRow' ? 'text-[#0057c1] bg-blue-50' : 'text-slate-300 hover:text-[#0057c1] hover:bg-slate-50'}`}
+              aria-label="复制该行"
+            >
+              {copiedKey === 'dateToTsRow' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+            </button>
             <div className="flex items-center gap-4">
               <div className="w-8 h-8 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
                 01
@@ -250,12 +262,12 @@ const TimestampTool = () => {
                     <span className="text-slate-300 font-light text-xl">→</span>
                     <span 
                       className="text-xl font-normal text-slate-900 tracking-tight cursor-pointer hover:text-[#0057c1] transition-colors"
-                      onClick={() => copyText(dateToTimestamp(confirmedDateToTs).toString(), 'dateToTs')}
+                      onClick={() => copyText(dateToTimestampResult.toString(), 'dateToTs')}
                     >
-                      {dateToTimestamp(confirmedDateToTs)}
+                      {dateToTimestampResult}
                     </span>
                     <button 
-                      onClick={() => copyText(dateToTimestamp(confirmedDateToTs).toString(), 'dateToTs')}
+                      onClick={() => copyText(dateToTimestampResult.toString(), 'dateToTs')}
                       className={`p-1 transition-colors ${copiedKey === 'dateToTs' ? 'text-[#0057c1]' : 'text-slate-300 hover:text-[#0057c1]'}`}
                     >
                       {copiedKey === 'dateToTs' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -268,6 +280,13 @@ const TimestampTool = () => {
 
           {/* Row 2: Timestamp to Date */}
           <div className="group rounded-xl bg-white border border-slate-200 hover:border-blue-300 transition-all p-4 flex flex-col gap-2 relative">
+            <button
+              onClick={() => copyText(formatRowCopyText(tsToDateInput, timestampToDateResult), 'tsToDateRow')}
+              className={`absolute top-3 right-3 p-1.5 rounded-md transition-colors ${copiedKey === 'tsToDateRow' ? 'text-[#0057c1] bg-blue-50' : 'text-slate-300 hover:text-[#0057c1] hover:bg-slate-50'}`}
+              aria-label="复制该行"
+            >
+              {copiedKey === 'tsToDateRow' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+            </button>
             <div className="flex items-center gap-4">
               <div className="w-8 h-8 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
                 02
@@ -298,12 +317,12 @@ const TimestampTool = () => {
                     <span className="text-slate-300 font-light text-xl">→</span>
                     <span 
                       className="text-xl font-normal text-slate-900 tracking-tight cursor-pointer hover:text-[#0057c1] transition-colors"
-                      onClick={() => copyText(timestampToDate(tsToDateInput), 'tsToDate')}
+                      onClick={() => copyText(timestampToDateResult, 'tsToDate')}
                     >
-                      {timestampToDate(tsToDateInput)}
+                      {timestampToDateResult}
                     </span>
                     <button 
-                      onClick={() => copyText(timestampToDate(tsToDateInput), 'tsToDate')}
+                      onClick={() => copyText(timestampToDateResult, 'tsToDate')}
                       className={`p-1 transition-colors ${copiedKey === 'tsToDate' ? 'text-[#0057c1]' : 'text-slate-300 hover:text-[#0057c1]'}`}
                     >
                       {copiedKey === 'tsToDate' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
