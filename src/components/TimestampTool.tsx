@@ -232,14 +232,14 @@ const TimestampTool = () => {
                 01
               </div>
               <div className="flex-1 flex flex-col">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">日期 → (北京) 时间戳</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">日期 → 时间戳</label>
                 <div className="flex items-center gap-6">
                   <div className="flex-1 max-w-md">
                     <DateTimePicker 
                       value={dateToTsInput}
                       onChange={handleDateToTsChange}
                       onPreviewChange={(val) => setDateToTsInput(val)}
-                      placeholder="请选择日期"
+                      placeholder="请输入或选择日期"
                     />
                   </div>
                   <div className="flex-1 flex items-center gap-3">
@@ -269,7 +269,7 @@ const TimestampTool = () => {
                 02
               </div>
               <div className="flex-1 flex flex-col">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">时间戳 → (北京) 日期</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">时间戳 → 日期</label>
                 <div className="flex items-center gap-6">
                   <div className="flex-1 max-w-md">
                     <div className="flex items-center gap-2 rounded-lg bg-white border border-slate-200 p-3 focus-within:border-[#4e45e4] focus-within:ring-1 focus-within:ring-[#4e45e4]/20 transition-all">

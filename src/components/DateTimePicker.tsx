@@ -100,7 +100,24 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ value, onChange, onPrev
 
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
+    initialValueRef.current = '';
     onChange('');
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextValue = event.target.value;
+    initialValueRef.current = nextValue;
+    onChange(nextValue);
+
+    if (!nextValue) {
+      return;
+    }
+
+    const parsedDate = new Date(nextValue);
+    if (!isNaN(parsedDate.getTime())) {
+      setSelectedDate(parsedDate);
+      setViewDate(new Date(parsedDate));
+    }
   };
 
   const handleNow = () => {
@@ -225,8 +242,8 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({ value, onChange, onPrev
       >
         <input 
           type="text"
-          readOnly
           value={value}
+          onChange={handleInputChange}
           placeholder={placeholder}
           className="flex-1 bg-transparent border-none outline-none font-mono text-xl font-normal text-slate-900 tracking-tight placeholder:text-slate-300 cursor-text"
         />
