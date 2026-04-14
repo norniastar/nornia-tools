@@ -15,6 +15,13 @@ import Tooltip from './Tooltip';
 import { ToolHeader, ToolPage } from './ToolPage';
 import { useCopyFeedback } from '../hooks/useCopyFeedback';
 import { useToolDraft } from '../hooks/useToolDraft';
+import {
+  formatJsonPreservingNumbers,
+  minifyJsonPreservingNumbers,
+  parseJsonPreservingNumbers,
+  stringifyJsonPreservingNumbers,
+} from '../utils/losslessJson';
+import { jsonBinaryOp, rewriteJsonFilterArithmetic } from '../utils/jsonFilterArithmetic';
 
 const JSON_EDITOR_CACHE_KEY = 'json_editor_draft';
 
@@ -59,7 +66,7 @@ const JSONEditorComponent = React.forwardRef(({ value, onChange, readOnly = fals
     if (containerRef.current && !editorRef.current) {
       editorRef.current = new JSONEditorLib(containerRef.current, {
         mode: 'code',
-        modes: readOnly ? ['code', 'text'] : ['code', 'tree', 'view', 'form', 'text'],
+        modes: ['code', 'text'],
         onChangeText: (jsonString: string) => {
           if (readOnly) return;
           isInternalChange.current = true;
@@ -73,13 +80,8 @@ const JSONEditorComponent = React.forwardRef(({ value, onChange, readOnly = fals
         navigationBar: false,
         statusBar: false,
       });
-      
-      try {
-        const json = JSON.parse(value);
-        editorRef.current.set(json);
-      } catch (e) {
-        editorRef.current.setText(value);
-      }
+
+      editorRef.current.setText(value);
 
       // Ensure Ace editor is read-only if requested
       if (readOnly && editorRef.current.aceEditor) {
@@ -99,12 +101,7 @@ const JSONEditorComponent = React.forwardRef(({ value, onChange, readOnly = fals
     if (editorRef.current && !isInternalChange.current) {
       const currentText = editorRef.current.getText();
       if (currentText !== value) {
-        try {
-          const json = JSON.parse(value);
-          editorRef.current.update(json);
-        } catch (e) {
-          editorRef.current.updateText(value);
-        }
+        editorRef.current.updateText(value);
       }
       
       // Re-apply read-only if needed after update
@@ -189,32 +186,34 @@ const JSONEditorTool = () => {
       }
 
       try {
-        const parsedData = JSON.parse(code);
+        const parsedData = parseJsonPreservingNumbers(code);
         
         let executableCode = activeFilter;
         if (!executableCode.includes('return')) {
           executableCode = `return (${executableCode})`;
         }
 
-        const filterFn = new Function('data', `
+        const transformedCode = rewriteJsonFilterArithmetic(executableCode);
+
+        const filterFn = new Function('data', '__jsonBinaryOp', `
           try {
             const context = { data: data };
             return (function() { 
-              ${executableCode}
+              ${transformedCode}
             }).call(context);
           } catch (e) {
             throw e;
           }
         `);
 
-        const result = filterFn(parsedData);
+        const result = filterFn(parsedData, jsonBinaryOp);
         
         if (result === undefined) {
           setResultCode('// Result is undefined');
           return;
         }
 
-        setResultCode(JSON.stringify(result, null, 2));
+        setResultCode(stringifyJsonPreservingNumbers(result, 2));
       } catch (err: any) {
         setResultCode(`// ${err.message}`);
       }
@@ -226,8 +225,7 @@ const JSONEditorTool = () => {
 
   const reformat = () => {
     try {
-      const parsed = JSON.parse(code);
-      setCode(JSON.stringify(parsed, null, 2));
+      setCode(formatJsonPreservingNumbers(code, 2));
       // Use setTimeout to ensure the editor has updated its content before expanding
       setTimeout(() => {
         editorRef.current?.expandAll();
@@ -244,7 +242,7 @@ const JSONEditorTool = () => {
 
   const minifyAndCopy = () => {
     try {
-      const minified = JSON.stringify(JSON.parse(code));
+      const minified = minifyJsonPreservingNumbers(code);
       copyText(minified, 'minify');
     } catch (e) {
       alert('Invalid JSON');
@@ -253,7 +251,7 @@ const JSONEditorTool = () => {
 
   const minifyEscapeAndCopy = () => {
     try {
-      const minified = JSON.stringify(JSON.parse(code));
+      const minified = minifyJsonPreservingNumbers(code);
       const escaped = JSON.stringify(minified);
       copyText(escaped, 'escape');
     } catch (e) {
