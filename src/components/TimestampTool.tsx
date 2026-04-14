@@ -90,14 +90,18 @@ const TimestampTool = () => {
     persistDraft(persistedDraft, Boolean(dateToTsInput || tsToDateInput));
   }, [persistDraft, persistedDraft, dateToTsInput, tsToDateInput]);
 
-  // Update input when timezone changes
-  useEffect(() => {
+  const handleTimezoneChange = (nextTimezone: string) => {
+    if (nextTimezone === timezone) return;
+
+    setTimezone(nextTimezone);
+
     if (!confirmedDateToTs) return;
+
     const date = new Date(confirmedTimestamp * 1000);
-    const newStr = formatDateTime(date, timezone);
-    setDateToTsInput(newStr);
-    setConfirmedDateToTs(newStr);
-  }, [timezone, confirmedDateToTs, confirmedTimestamp]);
+    const nextValue = formatDateTime(date, nextTimezone);
+    setDateToTsInput(nextValue);
+    setConfirmedDateToTs(nextValue);
+  };
 
   const handleUnitChange = (newUnit: 'ms' | 's') => {
     if (newUnit === unit) return;
@@ -200,19 +204,19 @@ const TimestampTool = () => {
             </div>
             <div className="absolute top-full right-0 mt-1 w-48 bg-white border border-slate-200 shadow-xl rounded-lg overflow-hidden z-50 opacity-0 invisible group-hover/tz:opacity-100 group-hover/tz:visible transition-all">
               <button 
-                onClick={() => setTimezone('UTC')}
+                onClick={() => handleTimezoneChange('UTC')}
                 className={`w-full text-left px-4 py-2.5 text-xs hover:bg-slate-50 transition-colors ${timezone === 'UTC' ? 'text-[#0057c1] font-bold bg-blue-50/50' : 'text-slate-600'}`}
               >
                 UTC+00:00 | UTC
               </button>
               <button 
-                onClick={() => setTimezone('Asia/Shanghai')}
+                onClick={() => handleTimezoneChange('Asia/Shanghai')}
                 className={`w-full text-left px-4 py-2.5 text-xs hover:bg-slate-50 transition-colors ${timezone === 'Asia/Shanghai' ? 'text-[#0057c1] font-bold bg-blue-50/50' : 'text-slate-600'}`}
               >
                 UTC+08:00 | 北京
               </button>
               <button 
-                onClick={() => setTimezone('America/New_York')}
+                onClick={() => handleTimezoneChange('America/New_York')}
                 className={`w-full text-left px-4 py-2.5 text-xs hover:bg-slate-50 transition-colors ${timezone === 'America/New_York' ? 'text-[#0057c1] font-bold bg-blue-50/50' : 'text-slate-600'}`}
               >
                 UTC-05:00 | 美国
