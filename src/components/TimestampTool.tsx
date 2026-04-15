@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { RefreshCw, Copy, Play, Pause, ChevronDown, X, Check } from 'lucide-react';
+import { RefreshCw, Copy, CopyPlus, Play, Pause, ChevronDown, X, Check } from 'lucide-react';
 import DateTimePicker from './DateTimePicker';
 import { ToolHeader, ToolPage } from './ToolPage';
 import { useCopyFeedback } from '../hooks/useCopyFeedback';
@@ -7,17 +7,49 @@ import { useToolDraft } from '../hooks/useToolDraft';
 
 const TIMESTAMP_TOOL_CACHE_KEY = 'timestamp_tool_draft';
 
-const formatRowCopyText = (left: string, right: string | number) => `${left || '-'} -> ${right || '-'}`;
+type DateToTsRow = {
+  id: string;
+  input: string;
+  confirmedInput: string;
+  confirmedTimestamp: number;
+};
+
+type TsToDateRow = {
+  id: string;
+  input: string;
+};
+
+const createRowId = () =>
+  typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+const createDateToTsRow = (seed?: Partial<Omit<DateToTsRow, 'id'>>): DateToTsRow => ({
+  id: createRowId(),
+  input: '',
+  confirmedInput: '',
+  confirmedTimestamp: Math.floor(Date.now() / 1000),
+  ...seed,
+});
+
+const createTsToDateRow = (seed?: Partial<Omit<TsToDateRow, 'id'>>): TsToDateRow => ({
+  id: createRowId(),
+  input: '',
+  ...seed,
+});
+
+const getLegacyDraftValue = <T,>(draft: Record<string, unknown>, key: string, fallback: T): T =>
+  key in draft ? (draft[key] as T) : fallback;
+
+const getRowLabel = (baseLabel: string, index: number) => (index === 0 ? baseLabel : `${baseLabel}-${index + 1}`);
 
 const TimestampTool = () => {
   const emptyDraft = useMemo(
     () => ({
       unit: 's' as 'ms' | 's',
       timezone: 'Asia/Shanghai',
-      dateToTsInput: '',
-      confirmedDateToTs: '',
-      confirmedTimestamp: Math.floor(Date.now() / 1000),
-      tsToDateInput: '',
+      dateToTsRows: [createDateToTsRow()],
+      tsToDateRows: [createTsToDateRow()],
     }),
     []
   );
@@ -31,6 +63,12 @@ const TimestampTool = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [now, setNow] = useState(Date.now());
   const { copiedKey, copyText } = useCopyFeedback<string>(1200);
+  const legacyDraft = cachedDraft as typeof cachedDraft & {
+    dateToTsInput?: string;
+    confirmedDateToTs?: string;
+    confirmedTimestamp?: number;
+    tsToDateInput?: string;
+  };
   
   const formatDateTime = (date: Date, tz: string) => {
     return date.toLocaleString('zh-CN', { 
@@ -72,52 +110,99 @@ const TimestampTool = () => {
     return new Date(date.getTime() + offset);
   };
 
-  const [dateToTsInput, setDateToTsInput] = useState(cachedDraft.dateToTsInput);
-  const [confirmedDateToTs, setConfirmedDateToTs] = useState(cachedDraft.confirmedDateToTs);
-  const [confirmedTimestamp, setConfirmedTimestamp] = useState(cachedDraft.confirmedTimestamp);
-  const [tsToDateInput, setTsToDateInput] = useState(cachedDraft.tsToDateInput);
+  const [dateToTsRows, setDateToTsRows] = useState<DateToTsRow[]>(() => {
+    const persistedRows = cachedDraft.dateToTsRows?.filter(Boolean) ?? [];
+    if (persistedRows.length > 0) {
+      return persistedRows.map(row => createDateToTsRow(row));
+    }
+
+    const legacyInput = getLegacyDraftValue(legacyDraft, 'dateToTsInput', '');
+    const legacyConfirmedInput = getLegacyDraftValue(legacyDraft, 'confirmedDateToTs', '');
+    const legacyConfirmedTimestamp = getLegacyDraftValue(legacyDraft, 'confirmedTimestamp', Math.floor(Date.now() / 1000));
+
+    if (legacyInput || legacyConfirmedInput) {
+      return [
+        createDateToTsRow({
+          input: legacyInput,
+          confirmedInput: legacyConfirmedInput || legacyInput,
+          confirmedTimestamp: legacyConfirmedTimestamp,
+        }),
+      ];
+    }
+
+    return [createDateToTsRow()];
+  });
+  const [tsToDateRows, setTsToDateRows] = useState<TsToDateRow[]>(() => {
+    const persistedRows = cachedDraft.tsToDateRows?.filter(Boolean) ?? [];
+    if (persistedRows.length > 0) {
+      return persistedRows.map(row => createTsToDateRow(row));
+    }
+
+    const legacyInput = getLegacyDraftValue(legacyDraft, 'tsToDateInput', '');
+    if (legacyInput) {
+      return [createTsToDateRow({ input: legacyInput })];
+    }
+
+    return [createTsToDateRow()];
+  });
   const persistedDraft = useMemo(
     () => ({
       unit,
       timezone,
-      dateToTsInput,
-      confirmedDateToTs,
-      confirmedTimestamp,
-      tsToDateInput,
+      dateToTsRows,
+      tsToDateRows,
     }),
-    [unit, timezone, dateToTsInput, confirmedDateToTs, confirmedTimestamp, tsToDateInput]
+    [unit, timezone, dateToTsRows, tsToDateRows]
   );
 
   useEffect(() => {
-    persistDraft(persistedDraft, Boolean(dateToTsInput || tsToDateInput));
-  }, [persistDraft, persistedDraft, dateToTsInput, tsToDateInput]);
+    persistDraft(
+      persistedDraft,
+      dateToTsRows.some(row => row.input || row.confirmedInput) || tsToDateRows.some(row => row.input)
+    );
+  }, [persistDraft, persistedDraft, dateToTsRows, tsToDateRows]);
 
   const handleTimezoneChange = (nextTimezone: string) => {
     if (nextTimezone === timezone) return;
 
     setTimezone(nextTimezone);
+    setDateToTsRows(rows =>
+      rows.map(row => {
+        if (!row.confirmedInput) {
+          return row;
+        }
 
-    if (!confirmedDateToTs) return;
-
-    const date = new Date(confirmedTimestamp * 1000);
-    const nextValue = formatDateTime(date, nextTimezone);
-    setDateToTsInput(nextValue);
-    setConfirmedDateToTs(nextValue);
+        const date = new Date(row.confirmedTimestamp * 1000);
+        const nextValue = formatDateTime(date, nextTimezone);
+        return {
+          ...row,
+          input: nextValue,
+          confirmedInput: nextValue,
+        };
+      })
+    );
   };
 
   const handleUnitChange = (newUnit: 'ms' | 's') => {
     if (newUnit === unit) return;
     
-    if (tsToDateInput) {
-      const ts = parseFloat(tsToDateInput);
-      if (!isNaN(ts)) {
-        if (newUnit === 'ms') {
-          setTsToDateInput((ts * 1000).toString());
-        } else {
-          setTsToDateInput(Math.floor(ts / 1000).toString());
+    setTsToDateRows(rows =>
+      rows.map(row => {
+        if (!row.input) {
+          return row;
         }
-      }
-    }
+
+        const ts = parseFloat(row.input);
+        if (isNaN(ts)) {
+          return row;
+        }
+
+        return {
+          ...row,
+          input: newUnit === 'ms' ? (ts * 1000).toString() : Math.floor(ts / 1000).toString(),
+        };
+      })
+    );
     setUnit(newUnit);
   };
 
@@ -149,16 +234,83 @@ const TimestampTool = () => {
     return formatDateTime(date, timezone);
   };
 
-  const handleDateToTsChange = (val: string) => {
-    setDateToTsInput(val);
-    setConfirmedDateToTs(val);
+  const handleDateToTsChange = (rowId: string, value: string) => {
+    setDateToTsRows(rows =>
+      rows.map(row => {
+        if (row.id !== rowId) {
+          return row;
+        }
 
-    if (!val) return;
+        const nextRow: DateToTsRow = {
+          ...row,
+          input: value,
+          confirmedInput: value,
+        };
 
-    const ts = parseInTimezone(val, timezone).getTime();
-    if (!isNaN(ts)) {
-      setConfirmedTimestamp(Math.floor(ts / 1000));
-    }
+        if (!value) {
+          return nextRow;
+        }
+
+        const ts = parseInTimezone(value, timezone).getTime();
+        if (!isNaN(ts)) {
+          nextRow.confirmedTimestamp = Math.floor(ts / 1000);
+        }
+
+        return nextRow;
+      })
+    );
+  };
+
+  const handleDateToTsPreviewChange = (rowId: string, value: string) => {
+    setDateToTsRows(rows =>
+      rows.map(row => (row.id === rowId ? { ...row, input: value } : row))
+    );
+  };
+
+  const handleTsToDateChange = (rowId: string, value: string) => {
+    setTsToDateRows(rows =>
+      rows.map(row => (row.id === rowId ? { ...row, input: value } : row))
+    );
+  };
+
+  const duplicateDateToTsRow = (rowId: string) => {
+    setDateToTsRows(rows => {
+      if (rows.length >= 2) return rows;
+
+      const index = rows.findIndex(row => row.id === rowId);
+      if (index === -1) return rows;
+
+      const sourceRow = rows[index];
+      const duplicatedRow = createDateToTsRow({
+        input: sourceRow.input,
+        confirmedInput: sourceRow.confirmedInput,
+        confirmedTimestamp: sourceRow.confirmedTimestamp,
+      });
+
+      return [...rows.slice(0, index + 1), duplicatedRow, ...rows.slice(index + 1)];
+    });
+  };
+
+  const duplicateTsToDateRow = (rowId: string) => {
+    setTsToDateRows(rows => {
+      if (rows.length >= 2) return rows;
+
+      const index = rows.findIndex(row => row.id === rowId);
+      if (index === -1) return rows;
+
+      const sourceRow = rows[index];
+      const duplicatedRow = createTsToDateRow({ input: sourceRow.input });
+
+      return [...rows.slice(0, index + 1), duplicatedRow, ...rows.slice(index + 1)];
+    });
+  };
+
+  const removeDateToTsRow = (rowId: string) => {
+    setDateToTsRows(rows => (rows.length === 1 ? rows : rows.filter(row => row.id !== rowId)));
+  };
+
+  const removeTsToDateRow = (rowId: string) => {
+    setTsToDateRows(rows => (rows.length === 1 ? rows : rows.filter(row => row.id !== rowId)));
   };
 
   const handleReset = () => {
@@ -166,14 +318,9 @@ const TimestampTool = () => {
     setTimezone('Asia/Shanghai');
     setIsPaused(false);
     setNow(Date.now());
-    setDateToTsInput('');
-    setConfirmedDateToTs('');
-    setConfirmedTimestamp(Math.floor(Date.now() / 1000));
-    setTsToDateInput('');
+    setDateToTsRows([createDateToTsRow()]);
+    setTsToDateRows([createTsToDateRow()]);
   };
-
-  const dateToTimestampResult = dateToTimestamp(confirmedDateToTs);
-  const timestampToDateResult = timestampToDate(tsToDateInput);
 
   return (
     <ToolPage>
@@ -234,104 +381,138 @@ const TimestampTool = () => {
 
       <div className="space-y-3 pr-1">
         <div className="space-y-3">
-          {/* Row 1: Date to Timestamp */}
-          <div className="group rounded-xl bg-white border border-slate-200 hover:border-blue-300 transition-all p-4 flex flex-col gap-2 relative">
-            <button
-              onClick={() => copyText(formatRowCopyText(confirmedDateToTs, dateToTimestampResult), 'dateToTsRow')}
-              className={`absolute top-3 right-3 p-1.5 rounded-md transition-colors ${copiedKey === 'dateToTsRow' ? 'text-[#0057c1] bg-blue-50' : 'text-slate-300 hover:text-[#0057c1] hover:bg-slate-50'}`}
-              aria-label="复制该行"
-            >
-              {copiedKey === 'dateToTsRow' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-            </button>
-            <div className="flex items-center gap-4">
-              <div className="w-8 h-8 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
-                01
-              </div>
-              <div className="flex-1 flex flex-col">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">日期 → 时间戳</label>
-                <div className="flex items-center gap-6">
-                  <div className="flex-1 max-w-md">
-                    <DateTimePicker 
-                      value={dateToTsInput}
-                      onChange={handleDateToTsChange}
-                      onPreviewChange={(val) => setDateToTsInput(val)}
-                      placeholder="请输入或选择日期"
-                    />
-                  </div>
-                  <div className="flex-1 flex items-center gap-3">
-                    <span className="text-slate-300 font-light text-xl">→</span>
-                    <span 
-                      className="text-xl font-normal text-slate-900 tracking-tight cursor-pointer hover:text-[#0057c1] transition-colors"
-                      onClick={() => copyText(dateToTimestampResult.toString(), 'dateToTs')}
-                    >
-                      {dateToTimestampResult}
-                    </span>
-                    <button 
-                      onClick={() => copyText(dateToTimestampResult.toString(), 'dateToTs')}
-                      className={`p-1 transition-colors ${copiedKey === 'dateToTs' ? 'text-[#0057c1]' : 'text-slate-300 hover:text-[#0057c1]'}`}
-                    >
-                      {copiedKey === 'dateToTs' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          {dateToTsRows.map((row, index) => {
+            const result = dateToTimestamp(row.confirmedInput);
 
-          {/* Row 2: Timestamp to Date */}
-          <div className="group rounded-xl bg-white border border-slate-200 hover:border-blue-300 transition-all p-4 flex flex-col gap-2 relative">
-            <button
-              onClick={() => copyText(formatRowCopyText(tsToDateInput, timestampToDateResult), 'tsToDateRow')}
-              className={`absolute top-3 right-3 p-1.5 rounded-md transition-colors ${copiedKey === 'tsToDateRow' ? 'text-[#0057c1] bg-blue-50' : 'text-slate-300 hover:text-[#0057c1] hover:bg-slate-50'}`}
-              aria-label="复制该行"
-            >
-              {copiedKey === 'tsToDateRow' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-            </button>
-            <div className="flex items-center gap-4">
-              <div className="w-8 h-8 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
-                02
-              </div>
-              <div className="flex-1 flex flex-col">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">时间戳 → 日期</label>
-                <div className="flex items-center gap-6">
-                  <div className="flex-1 max-w-md">
-                    <div className="flex items-center gap-2 rounded-lg bg-white border border-slate-200 p-3 focus-within:border-[#4e45e4] focus-within:ring-1 focus-within:ring-[#4e45e4]/20 transition-all">
-                      <input 
-                        type="text"
-                        value={tsToDateInput}
-                        onChange={(e) => setTsToDateInput(e.target.value)}
-                        placeholder="请输入时间戳"
-                        className="flex-1 bg-transparent border-none outline-none font-mono text-lg text-slate-900 placeholder:text-slate-300"
-                      />
-                      {tsToDateInput && (
-                        <button 
-                          onClick={() => setTsToDateInput('')}
-                          className="p-1 text-slate-300 hover:text-slate-500 transition-colors"
+            return (
+              <div key={row.id} className="group rounded-xl bg-white border border-slate-200 hover:border-blue-300 transition-all p-4 flex flex-col gap-2 relative">
+                {index === 0 && (
+                  <button
+                    onClick={() => duplicateDateToTsRow(row.id)}
+                    disabled={dateToTsRows.length >= 2}
+                    className={`absolute top-3 right-3 p-1.5 rounded-md transition-colors ${dateToTsRows.length >= 2 ? 'text-slate-200 cursor-not-allowed' : 'text-slate-300 hover:text-[#0057c1] hover:bg-slate-50'}`}
+                    aria-label="复制一行"
+                  >
+                    <CopyPlus className="w-4 h-4" />
+                  </button>
+                )}
+                {index > 0 && (
+                  <button
+                    onClick={() => removeDateToTsRow(row.id)}
+                    className="absolute top-3 right-3 p-1.5 rounded-md text-slate-300 hover:text-slate-500 hover:bg-slate-50 transition-colors"
+                    aria-label="移除该行"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-8 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
+                    {getRowLabel('01', index)}
+                  </div>
+                  <div className="flex-1 flex flex-col">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">日期 → 时间戳</label>
+                    <div className="flex items-center gap-6">
+                      <div className="flex-1 max-w-md">
+                        <DateTimePicker 
+                          value={row.input}
+                          onChange={(value) => handleDateToTsChange(row.id, value)}
+                          onPreviewChange={(value) => handleDateToTsPreviewChange(row.id, value)}
+                          placeholder="请输入或选择日期"
+                        />
+                      </div>
+                      <div className="flex-1 flex items-center gap-3">
+                        <span className="text-slate-300 font-light text-xl">→</span>
+                        <span 
+                          className="text-xl font-normal text-slate-900 tracking-tight cursor-pointer hover:text-[#0057c1] transition-colors"
+                          onClick={() => copyText(result.toString(), `dateToTs-${row.id}`)}
                         >
-                          <X className="w-4 h-4" />
+                          {result}
+                        </span>
+                        <button 
+                          onClick={() => copyText(result.toString(), `dateToTs-${row.id}`)}
+                          className={`p-1 transition-colors ${copiedKey === `dateToTs-${row.id}` ? 'text-[#0057c1]' : 'text-slate-300 hover:text-[#0057c1]'}`}
+                        >
+                          {copiedKey === `dateToTs-${row.id}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                         </button>
-                      )}
+                      </div>
                     </div>
                   </div>
-                  <div className="flex-1 flex items-center gap-3">
-                    <span className="text-slate-300 font-light text-xl">→</span>
-                    <span 
-                      className="text-xl font-normal text-slate-900 tracking-tight cursor-pointer hover:text-[#0057c1] transition-colors"
-                      onClick={() => copyText(timestampToDateResult, 'tsToDate')}
-                    >
-                      {timestampToDateResult}
-                    </span>
-                    <button 
-                      onClick={() => copyText(timestampToDateResult, 'tsToDate')}
-                      className={`p-1 transition-colors ${copiedKey === 'tsToDate' ? 'text-[#0057c1]' : 'text-slate-300 hover:text-[#0057c1]'}`}
-                    >
-                      {copiedKey === 'tsToDate' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    </button>
+                </div>
+              </div>
+            );
+          })}
+
+          {tsToDateRows.map((row, index) => {
+            const result = timestampToDate(row.input);
+
+            return (
+              <div key={row.id} className="group rounded-xl bg-white border border-slate-200 hover:border-blue-300 transition-all p-4 flex flex-col gap-2 relative">
+                {index === 0 && (
+                  <button
+                    onClick={() => duplicateTsToDateRow(row.id)}
+                    disabled={tsToDateRows.length >= 2}
+                    className={`absolute top-3 right-3 p-1.5 rounded-md transition-colors ${tsToDateRows.length >= 2 ? 'text-slate-200 cursor-not-allowed' : 'text-slate-300 hover:text-[#0057c1] hover:bg-slate-50'}`}
+                    aria-label="复制一行"
+                  >
+                    <CopyPlus className="w-4 h-4" />
+                  </button>
+                )}
+                {index > 0 && (
+                  <button
+                    onClick={() => removeTsToDateRow(row.id)}
+                    className="absolute top-3 right-3 p-1.5 rounded-md text-slate-300 hover:text-slate-500 hover:bg-slate-50 transition-colors"
+                    aria-label="移除该行"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-8 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
+                    {getRowLabel('02', index)}
+                  </div>
+                  <div className="flex-1 flex flex-col">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">时间戳 → 日期</label>
+                    <div className="flex items-center gap-6">
+                      <div className="flex-1 max-w-md">
+                        <div className="flex items-center gap-2 rounded-lg bg-white border border-slate-200 p-3 focus-within:border-[#4e45e4] focus-within:ring-1 focus-within:ring-[#4e45e4]/20 transition-all">
+                          <input 
+                            type="text"
+                            value={row.input}
+                            onChange={(event) => handleTsToDateChange(row.id, event.target.value)}
+                            placeholder="请输入时间戳"
+                            className="flex-1 bg-transparent border-none outline-none font-mono text-lg text-slate-900 placeholder:text-slate-300"
+                          />
+                          {row.input && (
+                            <button 
+                              onClick={() => handleTsToDateChange(row.id, '')}
+                              className="p-1 text-slate-300 hover:text-slate-500 transition-colors"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex-1 flex items-center gap-3">
+                        <span className="text-slate-300 font-light text-xl">→</span>
+                        <span 
+                          className="text-xl font-normal text-slate-900 tracking-tight cursor-pointer hover:text-[#0057c1] transition-colors"
+                          onClick={() => copyText(result, `tsToDate-${row.id}`)}
+                        >
+                          {result}
+                        </span>
+                        <button 
+                          onClick={() => copyText(result, `tsToDate-${row.id}`)}
+                          className={`p-1 transition-colors ${copiedKey === `tsToDate-${row.id}` ? 'text-[#0057c1]' : 'text-slate-300 hover:text-[#0057c1]'}`}
+                        >
+                          {copiedKey === `tsToDate-${row.id}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            );
+          })}
 
           {/* Row 3: Current Timestamp */}
           <div className="group rounded-xl bg-white border border-slate-200 hover:border-blue-300 transition-all p-6 flex flex-col gap-4 relative">
