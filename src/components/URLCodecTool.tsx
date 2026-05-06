@@ -16,6 +16,7 @@ const MODE_LABELS: Record<URLCodecMode, string> = {
 };
 
 const hasEncodedPattern = (value: string) => /%[0-9A-Fa-f]{2}/.test(value);
+const hasUnicodeEscapePattern = (value: string) => /\\u[0-9A-Fa-f]{4}/.test(value);
 
 const safeDecode = (value: string) => {
   try {
@@ -29,6 +30,55 @@ const safeDecode = (value: string) => {
       error: error instanceof Error ? error.message : '解码失败',
     };
   }
+};
+
+const decodeUnicodeEscapes = (value: string) => value.replace(
+  /\\u([0-9A-Fa-f]{4})/g,
+  (_, hex: string) => String.fromCharCode(Number.parseInt(hex, 16))
+);
+
+type DecodeResult =
+  | {
+      ok: true;
+      value: string;
+      decodedUrl: boolean;
+      decodedUnicode: boolean;
+      keptAfterUnicodeRestore: boolean;
+    }
+  | {
+      ok: false;
+      error: string;
+    };
+
+const decodeInput = (value: string): DecodeResult => {
+  const decodedUnicode = hasUnicodeEscapePattern(value);
+  const normalized = decodedUnicode ? decodeUnicodeEscapes(value) : value;
+
+  if (hasEncodedPattern(normalized)) {
+    const decoded = safeDecode(normalized);
+    if (decoded.ok) {
+      return {
+        ok: true,
+        value: decoded.value,
+        decodedUrl: true,
+        decodedUnicode,
+        keptAfterUnicodeRestore: false,
+      };
+    }
+
+    return {
+      ok: false,
+      error: decoded.error,
+    };
+  }
+
+  return {
+    ok: true,
+    value: normalized,
+    decodedUrl: false,
+    decodedUnicode,
+    keptAfterUnicodeRestore: decodedUnicode,
+  };
 };
 
 const URLCodecTool = () => {
@@ -72,10 +122,18 @@ const URLCodecTool = () => {
     }
 
     if (mode === 'decode') {
-      const decoded = safeDecode(input);
+      const decoded = decodeInput(input);
       if (decoded.ok) {
         setOutput(decoded.value);
-        setStatusMessage('已按解码处理');
+        if (decoded.decodedUnicode && decoded.decodedUrl) {
+          setStatusMessage('已还原 Unicode 转义并完成 URL 解码');
+        } else if (decoded.decodedUnicode) {
+          setStatusMessage('已还原 Unicode 转义');
+        } else if (decoded.decodedUrl) {
+          setStatusMessage('已按 URL 解码处理');
+        } else {
+          setStatusMessage('未检测到可解码内容，已保留原始输入');
+        }
         setStatusTone('info');
       } else {
         setOutput(input);
@@ -85,17 +143,27 @@ const URLCodecTool = () => {
       return;
     }
 
-    if (hasEncodedPattern(input)) {
-      const decoded = safeDecode(input);
+    if (hasEncodedPattern(input) || hasUnicodeEscapePattern(input)) {
+      const decoded = decodeInput(input);
       if (decoded.ok) {
         setOutput(decoded.value);
-        setStatusMessage('已按解码处理');
+        if (decoded.decodedUnicode && decoded.decodedUrl) {
+          setStatusMessage('自动识别为 Unicode 转义 + URL 编码，已完成解码');
+        } else if (decoded.decodedUnicode) {
+          setStatusMessage('自动识别为 Unicode 转义，已完成还原');
+        } else if (decoded.decodedUrl) {
+          setStatusMessage('自动识别为 URL 编码，已完成解码');
+        } else if (decoded.keptAfterUnicodeRestore) {
+          setStatusMessage('已还原 Unicode 转义');
+        } else {
+          setStatusMessage('已按解码处理');
+        }
         setStatusTone('info');
         return;
       }
 
       setOutput(encodeURIComponent(input));
-      setStatusMessage('输入不是有效的 URL 编码内容，已按普通文本编码');
+      setStatusMessage('检测到疑似编码内容，但 URL 解码失败，已按普通文本编码');
       setStatusTone('error');
       return;
     }
@@ -152,7 +220,7 @@ const URLCodecTool = () => {
           <textarea
             value={input}
             onChange={(event) => setInput(event.target.value)}
-            placeholder="输入需要进行 URL 编码或解码的内容"
+            placeholder="输入需要进行 URL 编码、URL 解码或 \\u0026 这类 Unicode 转义还原的内容"
             className="h-[220px] w-full resize-none border-none bg-transparent px-4 py-4 text-sm font-mono text-slate-900 outline-none placeholder:text-slate-300"
           />
         </div>

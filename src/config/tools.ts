@@ -50,7 +50,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
     id: 'urlCodec',
     name: 'URL 编解码',
-    description: '实时进行 URL 编码与解码，支持自动识别并快速复制结果。',
+    description: '实时进行 URL 编解码，并支持 \\u0026 这类 Unicode 转义内容的自动还原。',
     icon: Link2,
     route: '/url-codec',
     component: URLCodecTool,
