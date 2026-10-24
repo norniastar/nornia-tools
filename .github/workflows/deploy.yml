@@ -164,4 +164,4 @@ jobs:
       - name: Check public entry
         if: steps.ssh.outcome == 'success'
         shell: bash
-        run: curl --fail --silent --show-error --retry 2 --retry-delay 3 --max-time 15 https://tools.nornia.top/healthz
+        run: curl --user-agent 'Mozilla/5.0' --fail --silent --show-error --retry 2 --retry-delay 3 --max-time 15 https://tools.nornia.top/healthz
