@@ -1,86 +1,167 @@
-name: Build And Deploy
+name: Verify, Publish And Deploy
+run-name: ${{ github.event_name == 'workflow_dispatch' && format('历史镜像 {0} / 请求 {1}', inputs.image_sha, inputs.request_id) || format('发布 {0}', github.sha) }}
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      image_sha:
+        description: 已发布镜像的完整提交 SHA（不重新构建）
+        required: true
+        type: string
+      request_id:
+        description: 请求追踪编号
+        required: false
+        type: string
+      actor_id:
+        description: Dashboard 操作用户 ID
+        required: false
+        type: string
 
 permissions:
   contents: read
-  packages: write
 
-env:
-  REGISTRY: ghcr.io
+# 构建、部署、清理共用同一并发组；不终止正在执行的发布。
+concurrency:
+  group: release-${{ github.repository }}
+  cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  verify:
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run lint && npm run build
 
-      - name: Validate deployment settings
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST || vars.VPS_HOST }}
-          VPS_USER: ${{ secrets.VPS_USER || vars.VPS_USER }}
-          VPS_PORT: ${{ secrets.VPS_PORT || vars.VPS_PORT }}
-          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
-        run: |
-          test -n "${VPS_HOST}" || { echo "Missing deployment setting: VPS_HOST" >&2; exit 1; }
-          test -n "${VPS_USER}" || { echo "Missing deployment setting: VPS_USER" >&2; exit 1; }
-          test -n "${VPS_PORT}" || { echo "Missing deployment setting: VPS_PORT" >&2; exit 1; }
-          test -n "${VPS_SSH_KEY}" || { echo "Missing secret: VPS_SSH_KEY" >&2; exit 1; }
-
-      - name: Set image coordinates
+  publish:
+    if: github.event_name == 'push'
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Image coordinates
         id: image
-        run: |
-          image_repo="$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')"
-          version="$(node -p "require('./package.json').version")"
-          short_sha="$(printf '%s' "${GITHUB_SHA}" | cut -c1-7)"
-          echo "repo=${image_repo}" >> "$GITHUB_OUTPUT"
-          echo "sha_tag=sha-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
-          echo "main_tag=main" >> "$GITHUB_OUTPUT"
-          echo "version_tag=${version}-${short_sha}" >> "$GITHUB_OUTPUT"
+        shell: bash
+        run: echo "name=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ steps.image.outputs.name }}:main
+            ${{ steps.image.outputs.name }}:sha-${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          # 单平台应用不生成独立证明清单，包列表以一个版本对应一个镜像。
+          provenance: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      - name: Log in to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login "${{ env.REGISTRY }}" -u "${{ github.actor }}" --password-stdin
-
-      - name: Build image
-        run: |
-          docker build \
-            -t "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.sha_tag }}" \
-            -t "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.main_tag }}" \
-            -t "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.version_tag }}" \
-            .
-
-      - name: Push image
-        run: |
-          docker push "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.sha_tag }}"
-          docker push "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.main_tag }}"
-          docker push "${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.version_tag }}"
-
-      - name: Install SSH key
-        run: |
-          install -m 700 -d "$HOME/.ssh"
-          printf '%s\n' '${{ secrets.VPS_SSH_KEY }}' | tr -d '\r' > "$HOME/.ssh/id_ed25519"
-          chmod 600 "$HOME/.ssh/id_ed25519"
-
-      - name: Trust VPS host key
+  deploy:
+    if: always() && github.ref == 'refs/heads/main' && (needs.publish.result == 'success' || github.event_name == 'workflow_dispatch')
+    needs: [verify, publish]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: production
+      url: https://tools.nornia.top/
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Validate target and deployment settings
+        id: target
+        uses: actions/github-script@v9
         env:
-          VPS_HOST: ${{ secrets.VPS_HOST || vars.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT || vars.VPS_PORT }}
-        run: |
-          install -m 700 -d "$HOME/.ssh"
-          ssh-keyscan -p "${VPS_PORT:-22}" -H "${VPS_HOST}" >> "$HOME/.ssh/known_hosts"
-
-      - name: Trigger VPS deployment
+          TARGET_SHA: ${{ inputs.image_sha || github.sha }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_SSH_FINGERPRINT: ${{ secrets.VPS_SSH_FINGERPRINT }}
+        with:
+          script: |
+            const sha = process.env.TARGET_SHA;
+            if (!/^[a-f0-9]{40}$/.test(sha)) throw new Error('需要完整的小写提交 SHA');
+            for (const key of ['VPS_HOST', 'VPS_USER', 'VPS_SSH_KEY', 'VPS_SSH_FINGERPRINT']) {
+              if (!process.env[key]) throw new Error(`缺少 production Secret: ${key}`);
+            }
+            if (process.env.VPS_USER !== 'deploy') throw new Error('必须使用受限 deploy 用户');
+            if (context.eventName === 'push') {
+              const {data} = await github.rest.repos.getBranch({...context.repo, branch: 'main'});
+              if (data.commit.sha !== sha) { core.setOutput('deploy', 'false'); return; }
+            }
+            core.setOutput('sha', sha);
+            core.setOutput('deploy', 'true');
+      - name: Create image deployment record
+        id: release
+        if: steps.target.outputs.deploy == 'true'
+        uses: actions/github-script@v9
         env:
-          VPS_HOST: ${{ secrets.VPS_HOST || vars.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT || vars.VPS_PORT }}
-          VPS_USER: ${{ secrets.VPS_USER || vars.VPS_USER }}
-          VPS_DEPLOY_SCRIPT: ${{ vars.VPS_DEPLOY_SCRIPT }}
-          IMAGE_REF: ${{ env.REGISTRY }}/${{ steps.image.outputs.repo }}:${{ steps.image.outputs.sha_tag }}
-        run: |
-          deploy_script="${VPS_DEPLOY_SCRIPT:-/opt/nornia-tools/deploy.sh}"
-          ssh -i "$HOME/.ssh/id_ed25519" -p "${VPS_PORT:-22}" "${VPS_USER}@${VPS_HOST}" "${deploy_script} '${IMAGE_REF}'"
+          TARGET_SHA: ${{ steps.target.outputs.sha }}
+          REQUEST_ID: ${{ inputs.request_id }}
+          ACTOR_ID: ${{ inputs.actor_id }}
+        with:
+          script: |
+            const {data} = await github.rest.repos.createDeployment({
+              ...context.repo, ref: process.env.TARGET_SHA, auto_merge: false,
+              required_contexts: [], environment: 'vps-production', production_environment: true,
+              payload: { requestId: process.env.REQUEST_ID, actorId: process.env.ACTOR_ID,
+                runId: context.runId, source: context.eventName }
+            });
+            core.setOutput('id', data.id);
+            await github.rest.repos.createDeploymentStatus({
+              ...context.repo, deployment_id: data.id, state: 'in_progress', auto_inactive: false,
+              log_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+            });
+      - name: Deploy existing image on VPS
+        id: ssh
+        if: steps.target.outputs.deploy == 'true'
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          port: 57622
+          key: ${{ secrets.VPS_SSH_KEY }}
+          fingerprint: ${{ secrets.VPS_SSH_FINGERPRINT }}
+          command_timeout: 20m
+          script: sudo -n /usr/local/sbin/nornia-release nornia-tools ${{ steps.target.outputs.sha }}
+      - name: Record deployment result
+        if: always() && steps.release.outputs.id != ''
+        uses: actions/github-script@v9
+        env:
+          DEPLOYMENT_ID: ${{ steps.release.outputs.id }}
+          SSH_OUTCOME: ${{ steps.ssh.outcome }}
+        with:
+          script: |
+            const success = process.env.SSH_OUTCOME === 'success';
+            await github.rest.repos.createDeploymentStatus({
+              ...context.repo, deployment_id: Number(process.env.DEPLOYMENT_ID),
+              state: success ? 'success' : 'failure', auto_inactive: false,
+              environment_url: 'https://tools.nornia.top/',
+              log_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              description: success ? '目标镜像已通过 VPS 健康检查' : '发布失败；查看日志确认旧镜像恢复结果'
+            });
+      - name: Check public entry
+        if: steps.ssh.outcome == 'success'
+        shell: bash
+        run: curl --fail --silent --show-error --retry 2 --retry-delay 3 --max-time 15 https://tools.nornia.top/healthz

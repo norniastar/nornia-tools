@@ -1,123 +1,68 @@
-# 自动部署说明
+# GitHub Actions、GHCR 与 VPS 部署
 
-当前仓库的发布链路是：
+本项目与 `norniastar/nornia-dashboard` 使用相同的发布约定。VPS 配置以运维目录
+`/Users/nornia/nornia-sync/codex/nornia-vps` 为唯一来源。
 
-- 推送到 `main` 分支
-- GitHub-hosted runner 构建 Docker 镜像
-- 推送镜像到 GitHub Container Registry (`ghcr.io`)
-- 通过 SSH 登录 VPS
-- 调用 VPS 上的 Docker 部署脚本拉取新镜像并重启容器
+## 发布与回滚
 
-对应文件：
+- PR：执行 TypeScript 校验与前端构建。
+- push main：校验 → 构建 `linux/amd64` → 推送 GHCR → SSH 执行统一部署脚本。
+- 镜像标签：`ghcr.io/norniastar/nornia-tools:main`、`sha-<完整提交SHA>`。
+- Actions 手动触发：填写 `image_sha`，直接部署已有镜像，不 checkout 或构建历史源码。
+- Dashboard 的服务管理页也触发同一 `workflow_dispatch`，仅提供最近 10 个可部署镜像。
+- workflow 为 `.github/workflows/deploy.yml`，构建缓存使用 GHA；生产任务使用 `production` Environment。
 
-- GitHub Actions workflow: `.github/workflows/deploy.yml`
-- Docker 构建文件: `Dockerfile`
-- Nginx 运行配置: `nginx.conf`
-- VPS 部署脚本模板: `deploy/remote-deploy.sh.example`
+## VPS 约定
 
-## 第 1 步：确认 GitHub 仓库默认分支是 `main`
+| 项目 | 配置 |
+| --- | --- |
+| SSH | `154.44.20.127:57622`，专用 `deploy` 用户 |
+| Compose | `/srv/nornia/apps/nornia-tools/compose.yaml` |
+| 部署入口 | `sudo -n /usr/local/sbin/nornia-release nornia-tools <完整SHA>` |
+| 上游 | `127.0.0.1:18080:80` |
+| 健康检查 | `/healthz` |
+| 公网入口 | `https://tools.nornia.top/`，复用宿主机 Nginx |
 
-这个 workflow 只会在推送到 `main` 时触发：
+`/usr/local/sbin/nornia-release` 来自运维仓库 `scripts/release.sh`，由 root 持有。
+不再使用 `/opt/nornia-tools/deploy.sh`、`deploy.env` 或先删除容器的 `docker run` 流程。
+应用镜像包含 curl，Compose 同时检查镜像 ID、容器健康和本机 HTTP。
 
-```yaml
-on:
-  push:
-    branches:
-      - main
+脚本在拉取前为旧镜像建立本地回滚标签；新镜像拉取失败不会替换旧容器。
+更新失败时恢复旧镜像并重新检查健康，Actions 仍显示失败。脚本不执行数据库操作或全局 image prune。
+Compose 的 `NORNIA_IMAGE` 由脚本传入，请勿绕过脚本直接执行 `docker compose up`，以免部署浮动 main 标签。
+
+## GitHub 配置
+
+创建 Environment `production`，仅允许 main，若需要完全自动部署则不设置人工审批。
+Environment Secrets：`VPS_HOST`、`VPS_USER`（deploy）、`VPS_SSH_KEY`、`VPS_SSH_FINGERPRINT`。
+固定 SSH 端口为 57622；主机指纹必须通过可信管理连接核验，不能以 ssh-keyscan 的结果直接建立信任。
+
+Actions 使用 `GITHUB_TOKEN` 推送镜像。私有镜像的 VPS 拉取使用 root Docker 配置中独立的
+`read:packages` PAT，不能复用只有 repo 权限的本机 gh 登录。
+统一脚本安装、受限 sudo、密钥和 GHCR 初始化步骤见运维仓库 `docs/runbook.md` 的统一发布章节。
+
+## 版本记录与清理
+
+每次部署通过 GitHub Deployments 写入 `vps-production` 环境，记录目标镜像 SHA、请求编号、操作用户和执行日志。
+`production` 是工作流的凭据与审批环境，`vps-production` 是镜像发布记录，避免历史镜像与工作流源码 SHA 混淆。
+
+每周清理仅处理本包，保留最近 10 个 SHA 镜像，额外保留 main 和最近两次成功部署对应的镜像。
+不足两次成功记录时停止删除。旧的无标签 OCI 关联清单不自动删除，避免破坏已有镜像索引。
+Package Settings 必须给予本仓库工作流管理该包的权限，清理失败应检查此项。
+
+## 验收
+
+1. 完成运维脚本与 Secrets 初始化后，手动部署一个已存在的 SHA。
+2. 确认本机 `/healthz` 和公网 `/healthz` 返回 200。
+3. 确认 GitHub `vps-production` 部署记录目标 SHA 与容器实际镜像一致。
+4. 在隔离验收环境演练不健康镜像更新，确认旧容器恢复、Actions 返回失败。
+5. 再验证 push main 的构建、推送、部署全链路和 Dashboard 历史镜像发布。
+
+手动回滚：
+
+```sh
+ssh -p 57622 deploy@154.44.20.127 \
+  'sudo -n /usr/local/sbin/nornia-release nornia-tools <旧版本完整SHA>'
 ```
 
-## 第 2 步：准备 VPS 部署脚本
-
-在你的 VPS 上创建目录并放置部署脚本：
-
-```bash
-sudo mkdir -p /opt/nornia-tools
-sudo cp deploy/remote-deploy.sh.example /opt/nornia-tools/deploy.sh
-sudo chmod +x /opt/nornia-tools/deploy.sh
-```
-
-然后创建环境文件：
-
-```bash
-sudo tee /opt/nornia-tools/deploy.env >/dev/null <<'EOF'
-GHCR_USERNAME="<your-github-username>"
-GHCR_TOKEN="<github-token-with-read-packages>"
-APP_NAME="nornia-tools"
-HOST_PORT="18080"
-APP_PORT="80"
-EOF
-```
-
-说明：
-
-- `GHCR_TOKEN` 需要有 `read:packages` 权限
-- 如果镜像包是私有的，VPS 必须登录 GHCR 才能拉取
-- 如果你把包改成公开，理论上可以省略登录，但通常不建议一开始就这么做
-- `deploy.sh` 会自动加载 `/opt/nornia-tools/deploy.env`
-- `deploy.sh` 会把部署时间和镜像 tag 记录到 `/opt/nornia-tools/logs/deploy.log`
-
-## 第 3 步：给 GitHub Actions 配置 Secrets
-
-在 GitHub 仓库 `Settings > Secrets and variables > Actions` 中添加：
-
-- `VPS_HOST`: VPS IP 或域名
-- `VPS_PORT`: SSH 端口，默认可填 `22`
-- `VPS_USER`: SSH 登录用户名
-- `VPS_SSH_KEY`: GitHub Actions 用来登录 VPS 的私钥内容
-
-私钥建议单独为部署创建一把，例如：
-
-```bash
-ssh-keygen -t ed25519 -C "github-actions-deploy" -f ~/.ssh/github_actions_deploy
-```
-
-然后：
-
-- 把 `~/.ssh/github_actions_deploy.pub` 追加到 VPS 上目标用户的 `~/.ssh/authorized_keys`
-- 把 `~/.ssh/github_actions_deploy` 的内容保存到 GitHub Secret `VPS_SSH_KEY`
-
-## 第 4 步：可选配置 Repository Variable
-
-如果你在 VPS 上不想把脚本放在 `/opt/nornia-tools/deploy.sh`，可以新增一个 GitHub Actions Variable：
-
-- `VPS_DEPLOY_SCRIPT`: 例如 `/srv/apps/nornia-tools/deploy.sh`
-
-如果不配置，workflow 默认执行：
-
-```bash
-/opt/nornia-tools/deploy.sh
-```
-
-## 第 5 步：首次在 VPS 验证部署脚本
-
-先在 VPS 本机手动跑一次，确认 Docker、权限和 GHCR 登录都正常：
-
-```bash
-/opt/nornia-tools/deploy.sh ghcr.io/<owner>/<repo>:main
-```
-
-如果这里失败，不要先看 Actions，先把 VPS 侧问题解决掉。
-
-## 第 6 步：推送到 `main` 触发自动发布
-
-当你把代码推送到 `main` 后，workflow 会执行以下动作：
-
-1. 构建镜像
-2. 推送两个 tag 到 GHCR
-3. 通过 SSH 连接 VPS
-4. 调用部署脚本并传入本次 commit 对应的镜像 tag
-
-当前会推送两个 tag：
-
-- `ghcr.io/<owner>/<repo>:main`
-- `ghcr.io/<owner>/<repo>:sha-<commit_sha>`
-
-部署时实际使用的是 `sha-<commit_sha>`，这样回滚更清晰。
-
-## 第 7 步：常见排查点
-
-- `docker push` 权限失败：检查 workflow 是否有 `packages: write`
-- VPS 拉镜像失败：检查 `GHCR_TOKEN` 是否有 `read:packages`
-- SSH 登录失败：检查 `VPS_USER`、`VPS_PORT`、私钥和 `authorized_keys`
-- 部署脚本找不到：检查 `VPS_DEPLOY_SCRIPT` 或服务器上的默认路径
-- 容器启动后无法访问：检查 VPS 防火墙、安全组和 `HOST_PORT`
+直接 SSH 发布不会自动补写 GitHub 部署记录。日常使用 Actions 或 Dashboard；紧急 SSH 操作后须核验并补齐记录。
