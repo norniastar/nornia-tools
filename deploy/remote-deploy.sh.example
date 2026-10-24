@@ -1,43 +1,5 @@
 #!/usr/bin/env bash
+# 兼容人工入口示例：统一脚本由运维仓库安装，不再维护第二套容器部署逻辑。
 set -euo pipefail
-
-IMAGE_REF="${1:?usage: deploy.sh <image-ref>}"
-ENV_FILE="/opt/nornia-tools/deploy.env"
-LOG_DIR="/opt/nornia-tools/logs"
-LOG_FILE="${LOG_DIR}/deploy.log"
-
-if [ -f "${ENV_FILE}" ]; then
-  set -a
-  . "${ENV_FILE}"
-  set +a
-fi
-
-APP_NAME="${APP_NAME:-nornia-tools}"
-APP_PORT="${APP_PORT:-80}"
-HOST_PORT="${HOST_PORT:-18080}"
-GHCR_USERNAME="${GHCR_USERNAME:?set GHCR_USERNAME}"
-GHCR_TOKEN="${GHCR_TOKEN:?set GHCR_TOKEN}"
-
-mkdir -p "${LOG_DIR}"
-timestamp="$(date '+%Y-%m-%d %H:%M:%S %z')"
-
-log() {
-  printf '[%s] %s\n' "${timestamp}" "$1" >> "${LOG_FILE}"
-}
-
-log "start deploy image=${IMAGE_REF}"
-echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GHCR_USERNAME}" --password-stdin
-docker pull "${IMAGE_REF}"
-
-if docker ps -a --format '{{.Names}}' | grep -Fxq "${APP_NAME}"; then
-  docker rm -f "${APP_NAME}"
-fi
-
-docker run -d \
-  --name "${APP_NAME}" \
-  --restart unless-stopped \
-  -p "${HOST_PORT}:${APP_PORT}" \
-  "${IMAGE_REF}"
-
-docker image prune -f
-log "deploy success image=${IMAGE_REF} app=${APP_NAME} host_port=${HOST_PORT}"
+SHA=${1:?usage: remote-deploy.sh <完整提交SHA>}
+exec sudo -n /usr/local/sbin/nornia-release nornia-tools "$SHA"
