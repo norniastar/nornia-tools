@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowUpAZ, FileDiff, RefreshCw, Trash2 } from 'lucide-react';
 import { DiffEditor } from '@monaco-editor/react';
+import '../utils/monacoSetup';
 import YAML from 'yaml';
 import Tooltip from './Tooltip';
 import { ToolHeader, ToolPage } from './ToolPage';
