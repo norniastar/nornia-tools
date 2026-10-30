@@ -6,6 +6,7 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
+ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
 FROM nginx:1.27-alpine
@@ -13,7 +14,7 @@ FROM nginx:1.27-alpine
 RUN apk add --no-cache curl
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/out /usr/share/nginx/html
 
 EXPOSE 80
 

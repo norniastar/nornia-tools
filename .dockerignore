@@ -10,3 +10,5 @@ gin-vue-admin
 
 # 测速与护栏产物不参与应用镜像构建。
 perf
+.next
+out

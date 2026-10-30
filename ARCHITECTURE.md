@@ -14,7 +14,7 @@ Current product shape:
 - One application shell
 - One overview page
 - Multiple independent tools
-- Hash-route direct access for every tool
+- Path-route direct access for every tool, statically generated HTML
 - Local-first interactions
 - No backend dependency for core tool flows
 
@@ -86,10 +86,16 @@ Tool pages should use content-driven layout first.
 
 ### 应用壳层
 
-- [`src/App.tsx`](/Users/nornia/code/codex/tools/src/App.tsx)
-  App composition, tool registry, route mapping, footer.
+- [`src/app/layout.tsx`](/Users/nornia/code/codex/tools/src/app/layout.tsx)
+  Root layout (Server Component): site metadata, `<head>` scripts, shell composition, footer.
+- [`src/components/AppShell.tsx`](/Users/nornia/code/codex/tools/src/components/AppShell.tsx)
+  Client shell: search, sidebar state, page enter animation.
+- [`src/app/[tool]/page.tsx`](/Users/nornia/code/codex/tools/src/app/[tool]/page.tsx)
+  Statically generated tool pages: per-tool metadata, JSON-LD, client tool loader, about section.
+- [`src/components/ToolLoader.tsx`](/Users/nornia/code/codex/tools/src/components/ToolLoader.tsx)
+  Client-only, on-demand loading of tool components with a static header skeleton.
 - [`src/config/tools.ts`](/Users/nornia/code/codex/tools/src/config/tools.ts)
-  Single source of truth for tool metadata, routes, and component registration.
+  Single source of truth for tool metadata, routes, and SEO copy.
 - [`src/components/Layout.tsx`](/Users/nornia/code/codex/tools/src/components/Layout.tsx)
   Navbar and sidebar shell.
 - [`src/components/Dashboard.tsx`](/Users/nornia/code/codex/tools/src/components/Dashboard.tsx)
@@ -118,12 +124,19 @@ All tool pages live in [`src/components`](/Users/nornia/code/codex/tools/src/com
 
 ## 路由规则
 
-Routing is hash-based and lightweight by design.
+Routing uses the Next.js App Router with static export (`output: 'export'`).
+`/` is the dashboard; every tool is served from `/[slug]`, generated at build time from `TOOL_DEFINITIONS`.
+
+Rendering rules:
+
+- Pages are Server Components and statically generated; SEO content (title, description, h1, about section, JSON-LD) must be in the HTML
+- Tool components depend on browser APIs (localStorage drafts, crypto, editors), so they are client-only and loaded on demand through `ToolLoader`
+- Only components that need browser interaction use `'use client'`
 
 Rules:
 
 - Every tool must have one stable `ToolId`
-- Every tool must have one stable hash route
+- Every tool must have one stable path slug
 - `ToolId`, route map, and dashboard entry must stay aligned
 - Route naming should be short, explicit, and kebab-case
 
@@ -153,7 +166,7 @@ Every tool component should follow the same high-level contract.
 
 ### 避免事项
 
-- Tool logic leaking into `App.tsx`
+- Tool logic leaking into `AppShell.tsx` or route files
 - Cross-tool imports between tool pages
 - One huge “shared tool engine” abstraction
 - Persisting ephemeral presentation state
@@ -274,7 +287,7 @@ Owns:
 
 - tool metadata
 - route strings
-- tool-to-component registration
+- SEO copy (title, description, keywords, intro, features)
 
 Does not own:
 
@@ -282,11 +295,11 @@ Does not own:
 - app layout
 - page-specific interaction state
 
-### `App.tsx`
+### `AppShell.tsx`
 
 Owns:
 
-- active tool selection
+- search state and sidebar preferences
 - shell composition
 
 Does not own:
