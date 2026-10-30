@@ -3,6 +3,11 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "packageManager": "npm@12.2.1",
+  "engines": {
+    "node": "26.13.0",
+    "npm": "12.2.1"
+  },
   "scripts": {
     "dev": "next dev --port 3000 --hostname 0.0.0.0",
     "build": "next build",
@@ -26,7 +31,7 @@
     "@babel/traverse": "^7.29.0",
     "@babel/types": "^7.29.0",
     "@tailwindcss/postcss": "^4.3.3",
-    "@types/node": "^22.14.0",
+    "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "tailwindcss": "^4.1.14",
