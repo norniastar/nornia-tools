@@ -1,13 +1,17 @@
-import React from 'react';
-import { Search, ChevronRight, ChevronLeft } from 'lucide-react';
-import { ToolDefinition, ToolId } from '../types';
+'use client';
 
-export const Navbar = ({ searchQuery, setSearchQuery, onLogoClick }: { searchQuery: string, setSearchQuery: (val: string) => void, onLogoClick: () => void }) => (
+import React from 'react';
+import Link from 'next/link';
+import { Search, ChevronRight, ChevronLeft } from 'lucide-react';
+import { toolPath } from '../config/tools';
+import type { ToolDefinition } from '../types';
+
+export const Navbar = ({ searchQuery, setSearchQuery }: { searchQuery: string, setSearchQuery: (val: string) => void }) => (
   <nav className="sticky top-0 w-full z-50 bg-white border-b border-slate-200 h-14">
     <div className="flex items-center justify-between px-6 h-full max-w-[1600px] mx-auto">
       <div className="flex items-center gap-8">
-        <button 
-          onClick={onLogoClick}
+        <Link
+          href="/"
           className="flex items-center gap-3 text-lg font-bold tracking-tight text-[#0057c1] hover:opacity-80 transition-opacity"
         >
           <span className="relative flex h-8 w-8 items-center justify-center">
@@ -19,14 +23,15 @@ export const Navbar = ({ searchQuery, setSearchQuery, onLogoClick }: { searchQue
             </svg>
           </span>
           Nornia Tools
-        </button>
+        </Link>
       </div>
       <div className="flex items-center gap-4">
         <div className="relative hidden sm:block">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
           <input 
             type="text" 
-            placeholder="搜索工具..." 
+            placeholder="搜索工具..."
+            aria-label="搜索工具" 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="bg-slate-100 border border-slate-200 rounded-md pl-10 pr-4 py-1.5 text-sm w-64 focus:ring-1 focus:ring-[#0057c1] focus:border-[#0057c1]"
@@ -37,13 +42,13 @@ export const Navbar = ({ searchQuery, setSearchQuery, onLogoClick }: { searchQue
   </nav>
 );
 
-export const Sidebar = ({ activeTool, setActiveTool, tools, isCollapsed, setIsCollapsed, width, setWidth }: { 
-  activeTool: ToolId, 
-  setActiveTool: (id: ToolId) => void, 
+export const Sidebar = ({ pathname, tools, isCollapsed, setIsCollapsed, width, setWidth }: { 
+  pathname: string, 
   tools: ToolDefinition[],
   isCollapsed: boolean,
   setIsCollapsed: (val: boolean) => void,
-  width: number,
+  /** 水合前是 CSS 变量字符串，水合后是像素值 */
+  width: number | string,
   setWidth: (val: number) => void
 }) => {
   const isResizing = React.useRef(false);
@@ -84,7 +89,7 @@ export const Sidebar = ({ activeTool, setActiveTool, tools, isCollapsed, setIsCo
 
   return (
     <aside 
-      style={{ width: isCollapsed ? 64 : width }}
+      style={{ width }}
       className={`hidden lg:flex self-stretch border-r border-slate-200 bg-[#f8f9ff] flex-col ${isCollapsed ? 'overflow-visible' : 'overflow-hidden'} ${isResizingState ? '' : 'transition-[width] duration-300 ease-in-out'} group relative`}
     >
       <div className={`flex-1 flex flex-col p-3 ${isCollapsed ? 'overflow-visible' : 'overflow-hidden'}`}>
@@ -100,14 +105,18 @@ export const Sidebar = ({ activeTool, setActiveTool, tools, isCollapsed, setIsCo
         </div>
           <nav className="flex flex-col gap-1">
             {tools.map(tool => {
+              const href = toolPath(tool);
+              const isActive = pathname === href;
               const button = (
-                <button 
-                  onClick={() => setActiveTool(tool.id)}
-                  className={`flex items-center w-full ${isCollapsed ? 'justify-center' : 'gap-3'} px-3 py-2 transition-all rounded-none ${activeTool === tool.id ? 'bg-white text-[#0057c1] border border-slate-200' : 'text-slate-500 hover:bg-slate-200/50'}`}
+                <Link
+                  href={href}
+                  aria-current={isActive ? 'page' : undefined}
+                  aria-label={isCollapsed ? tool.name : undefined}
+                  className={`flex items-center w-full ${isCollapsed ? 'justify-center' : 'gap-3'} px-3 py-2 transition-all rounded-none ${isActive ? 'bg-white text-[#0057c1] border border-slate-200' : 'text-slate-500 hover:bg-slate-200/50'}`}
                 >
                   <tool.icon className="w-5 h-5 shrink-0" />
                   {!isCollapsed && <span className="text-sm font-medium truncate">{tool.name}</span>}
-                </button>
+                </Link>
               );
 
               return <React.Fragment key={tool.id}>{button}</React.Fragment>;

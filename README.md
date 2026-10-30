@@ -31,7 +31,7 @@
 
 ## 特性
 
-- Hash 路由直达，每个工具都支持书签访问
+- 每个工具都有独立 URL，静态生成 HTML，便于书签访问与搜索引擎收录
 - 统一的工具页结构和右上角交互规范
 - 高频复制操作采用轻量反馈
 - 部分工具支持页面内切换保留输入内容，手动刷新后清空
@@ -39,9 +39,9 @@
 
 ## 技术栈
 
+- Next.js（App Router，静态导出）
 - React
 - TypeScript
-- Vite
 - Tailwind CSS
 - Monaco Editor
 - Lucide Icons
@@ -50,7 +50,7 @@
 
 ### 环境要求
 
-- Node.js 18+
+- Node.js 20.9+
 
 ### 安装依赖
 
@@ -70,35 +70,40 @@ npm run dev
 npm run lint
 ```
 
+### 构建
+
+```bash
+npm run build   # 静态导出到 out/，由 nginx 托管
+```
+
 ## 自动部署
 
 部署说明已经拆到独立文件，部署完成后你可以直接删除它：
 
 - [DEPLOY.md](./DEPLOY.md)
 
-当前 VPS 部署脚本默认从 `/opt/nornia-tools/deploy.env` 读取部署变量。
 
 ## 路由
 
-支持以下 hash 路由：
+- `/`
+- `/json`
+- `/timestamp`
+- `/uuid`
+- `/text-code-diff`
+- `/url-codec`
+- `/calculator`
 
-- `#/`
-- `#/json`
-- `#/timestamp`
-- `#/uuid`
-- `#/text-code-diff`
-- `#/url-codec`
-- `#/calculator`
+每个页面都在构建时生成静态 HTML（标题、描述、canonical、Open Graph、JSON-LD），工具交互部分在浏览器中按需加载。`sitemap.xml` 与 `robots.txt` 也在构建时生成。
 
 ## 项目结构
 
 ```text
 src/
-  components/        页面级工具与共享组件
-  config/            工具注册与路由配置
+  app/               Next.js 路由：layout、首页、[tool] 工具页、sitemap、robots、分享图
+  components/        页面级工具与共享组件（AppShell 为客户端应用壳）
+  config/            工具注册、路由与 SEO 文案
   hooks/             通用交互 hooks
   utils/             基础工具函数
-  App.tsx            应用壳与页面装配
 ```
 
 ## 规范文档

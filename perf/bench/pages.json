@@ -1,9 +1,9 @@
 {
-  "home": {"path": "/", "ready": "[...document.querySelectorAll('main button')].filter(b => b.offsetParent !== null).length >= 6"},
-  "json": {"path": "/#/json", "ready": "!!document.querySelector('.ace_editor .ace_text-input') && !!document.querySelector('.ace_editor .ace_line')"},
-  "timestamp": {"path": "/#/timestamp", "ready": "document.querySelector('main input[placeholder=\"请输入时间戳\"]')?.offsetParent != null", "type_check": "main input[placeholder=\"请输入时间戳\"]"},
-  "uuid": {"path": "/#/uuid", "ready": "/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}/.test(document.querySelector('main')?.innerText || '')"},
-  "diff": {"path": "/#/text-code-diff", "ready": "document.querySelectorAll('.monaco-diff-editor .view-lines').length >= 2 && !!document.querySelector('.monaco-diff-editor textarea')"},
-  "url": {"path": "/#/url-codec", "ready": "document.querySelector('main textarea')?.offsetParent != null", "type_check": "main textarea"},
-  "calculator": {"path": "/#/calculator", "ready": "document.querySelector('main input')?.offsetParent != null", "type_check": "main input"}
+  "home": {"path": "/", "ready": "[...document.querySelectorAll('main section a')].filter(b => b.offsetParent !== null).length >= 6"},
+  "json": {"path": "/json", "ready": "!!document.querySelector('.ace_editor .ace_text-input') && !!document.querySelector('.ace_editor .ace_line')"},
+  "timestamp": {"path": "/timestamp", "ready": "document.querySelector('main input[placeholder=\"请输入时间戳\"]')?.offsetParent != null", "type_check": "main input[placeholder=\"请输入时间戳\"]"},
+  "uuid": {"path": "/uuid", "ready": "/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}/.test(document.querySelector('main')?.innerText || '')"},
+  "diff": {"path": "/text-code-diff", "ready": "document.querySelectorAll('.monaco-diff-editor .view-lines').length >= 2 && !!document.querySelector('.monaco-diff-editor textarea')"},
+  "url": {"path": "/url-codec", "ready": "document.querySelector('main textarea')?.offsetParent != null", "type_check": "main textarea"},
+  "calculator": {"path": "/calculator", "ready": "document.querySelector('main input')?.offsetParent != null", "type_check": "main input"}
 }

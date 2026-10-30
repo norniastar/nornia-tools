@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+/* 切换工具时的进入动画：0.2s 淡入并上移 10px */
+@keyframes tool-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.tool-enter {
+  animation: tool-enter 0.2s ease-in-out;
+}

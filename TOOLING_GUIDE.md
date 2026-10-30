@@ -13,7 +13,7 @@ Define these five things first:
 
 1. Tool name
 2. Internal `ToolId`
-3. Hash route
+3. Path slug
 4. Core input
 5. Core output
 
@@ -48,7 +48,6 @@ Example:
 
 ```ts
 export type ToolId =
-  | 'dashboard'
   | 'json'
   | 'timestamp'
   | 'uuid'
@@ -80,10 +79,11 @@ Update [`src/config/tools.ts`](/Users/nornia/code/codex/tools/src/config/tools.t
 
 Required changes:
 
-- add the new tool definition
-- set the route
-- register the component
-- register the icon and metadata
+- add the new tool definition (`slug`, icon, name, description)
+- fill in the SEO fields: `seoTitle`, `seoDescription`, `keywords`, `intro`, `features`
+- register the component in [`src/components/ToolLoader.tsx`](/Users/nornia/code/codex/tools/src/components/ToolLoader.tsx) with `dynamic(..., { ssr: false })` and a skeleton entry
+
+The page, sitemap entry, metadata, and JSON-LD are generated from the definition automatically.
 
 Route rules:
 
@@ -94,7 +94,7 @@ Route rules:
 Example:
 
 ```ts
-newTool: '/new-tool'
+slug: 'new-tool' // served at /new-tool
 ```
 
 ### 4. 注册首页入口
@@ -297,7 +297,7 @@ Bad examples:
 
 ## 合并前检查清单
 
-- route works from hash directly
+- route works when opened directly (`/new-tool`) and the exported HTML contains the title and about section
 - sidebar selection works
 - dashboard card opens the tool
 - empty state is clean
