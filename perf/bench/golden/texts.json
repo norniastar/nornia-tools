@@ -1,0 +1,72 @@
+{
+ "home-1440": {
+  "title": "Nornia Tools",
+  "text": "Nornia Tools\n\nv0.0.1\n\nJSON 编辑器\n时间戳转换\nUUID 生成器\n文本代码对比\nURL 编解码\n计算稿纸\nDEVELOPER UTILITY TOOLKIT\n开发小工具\n\n打开即用，处理常见开发任务。\n\nOVERVIEW\n6\nTOOLS\nTOOLS\n工具列表\n共 6 项\nJSON 编辑器\n\n格式化、验证并转换复杂的 JSON 数据结构。支持一键美化与压缩。\n\n开始处理\n时间戳转换\n\n在 Unix 时间戳与人类可读日期之间快速转换，支持多种时区选择。\n\n开始处理\nUUID 生成器\n\n批量生成符合 RFC 4122 的 v4 唯一标识符。\n\n开始处理\n文本代码对比\n\n并排对比文本或代码内容，实时高亮新增、删除及修改差异。\n\n开始处理\nURL 编解码\n\n实时进行 URL 编解码，并支持 \\u0026 这类 Unicode 转义内容的自动还原。\n\n开始处理\n计算稿纸\n\n反应式数学笔记本。编写逻辑，即时查看结果。支持变量定义。\n\n开始处理\n© 2026 NORNIA TOOLS ARTISAN EDITION\nPRIVACY POLICY\nTERMS OF SERVICE\nCHANGELOG",
+  "errors": []
+ },
+ "home-390": {
+  "title": "Nornia Tools",
+  "text": "Nornia Tools\nDEVELOPER UTILITY TOOLKIT\n开发小工具\n\n打开即用，处理常见开发任务。\n\nOVERVIEW\n6\nTOOLS\nTOOLS\n工具列表\n共 6 项\nJSON 编辑器\n\n格式化、验证并转换复杂的 JSON 数据结构。支持一键美化与压缩。\n\n开始处理\n时间戳转换\n\n在 Unix 时间戳与人类可读日期之间快速转换，支持多种时区选择。\n\n开始处理\nUUID 生成器\n\n批量生成符合 RFC 4122 的 v4 唯一标识符。\n\n开始处理\n文本代码对比\n\n并排对比文本或代码内容，实时高亮新增、删除及修改差异。\n\n开始处理\nURL 编解码\n\n实时进行 URL 编解码，并支持 \\u0026 这类 Unicode 转义内容的自动还原。\n\n开始处理\n计算稿纸\n\n反应式数学笔记本。编写逻辑，即时查看结果。支持变量定义。\n\n开始处理\n© 2026 NORNIA TOOLS ARTISAN EDITION\nPRIVACY POLICY\nTERMS OF SERVICE\nCHANGELOG",
+  "errors": []
+ },
+ "json-1440": {
+  "title": "Nornia Tools",
+  "text": "Nornia Tools\n\nv0.0.1\n\nJSON 编辑器\n时间戳转换\nUUID 生成器\n文本代码对比\nURL 编解码\n计算稿纸\nJSON 编辑器\n重新格式化\n折叠全部\n展开全部\n去除注释\n压缩 JSON 并复制\n压缩转义 JSON 并复制\n清除全部\n输入\n1\nTHIS.DATA\n© 2026 NORNIA TOOLS ARTISAN EDITION\nPRIVACY POLICY\nTERMS OF SERVICE\nCHANGELOG",
+  "errors": []
+ },
+ "json-390": {
+  "title": "Nornia Tools",
+  "text": "Nornia Tools\nJSON 编辑器\n重新格式化\n折叠全部\n展开全部\n去除注释\n压缩 JSON 并复制\n压缩转义 JSON 并复制\n清除全部\n输入\n1\nTHIS.DATA\n© 2026 NORNIA TOOLS ARTISAN EDITION\nPRIVACY POLICY\nTERMS OF SERVICE\nCHANGELOG",
+  "errors": []
+ },
+ "timestamp-1440": {
+  "title": "Nornia Tools",
+  "text": "Nornia Tools\n\nv0.0.1\n\nJSON 编辑器\n时间戳转换\nUUID 生成器\n文本代码对比\nURL 编解码\n计算稿纸\n时间戳转换\n毫秒\n秒\nUTC+08:00 | 北京\n01\n日期 → 时间戳\n→\n-\n02\n时间戳 → 日期\n→\n-\n03\n当前时间戳\n1767225600000\n暂停\n重置数据\n© 2026 NORNIA TOOLS ARTISAN EDITION\nPRIVACY POLICY\nTERMS OF SERVICE\nCHANGELOG",
+  "errors": []
+ },
+ "timestamp-390": {
+  "title": "Nornia Tools",
+  "text": "Nornia Tools\n时间戳转换\n毫秒\n秒\nUTC+08:00 | 北京\n01\n日期 → 时间戳\n→\n-\n02\n时间戳 → 日期\n→\n-\n03\n当前时间戳\n1767225600000\n暂停\n重置数据\n© 2026 NORNIA TOOLS ARTISAN EDITION\nPRIVACY POLICY\nTERMS OF SERVICE\nCHANGELOG",
+  "errors": []
+ },
+ "uuid-1440": {
+  "title": "Nornia Tools",
+  "text": "Nornia Tools\n\nv0.0.1\n\nJSON 编辑器\n时间戳转换\nUUID 生成器\n文本代码对比\nURL 编解码\n计算稿纸\nUUID 生成器\n刷新\n生成的标识符\n01\n11111111-2222-4333-8444-555555555555\n小写\n02\n11111111-2222-4333-8444-555555555555\n大写\n03\n11111111222243338444555555555555\n去掉 [-] 小写\n04\n11111111222243338444555555555555\n去掉 [-] 大写\n© 2026 NORNIA TOOLS ARTISAN EDITION\nPRIVACY POLICY\nTERMS OF SERVICE\nCHANGELOG",
+  "errors": []
+ },
+ "uuid-390": {
+  "title": "Nornia Tools",
+  "text": "Nornia Tools\nUUID 生成器\n刷新\n生成的标识符\n01\n11111111-2222-4333-8444-555555555555\n小写\n02\n11111111-2222-4333-8444-555555555555\n大写\n03\n11111111222243338444555555555555\n去掉 [-] 小写\n04\n11111111222243338444555555555555\n去掉 [-] 大写\n© 2026 NORNIA TOOLS ARTISAN EDITION\nPRIVACY POLICY\nTERMS OF SERVICE\nCHANGELOG",
+  "errors": []
+ },
+ "diff-1440": {
+  "title": "Nornia Tools",
+  "text": "Nornia Tools\n\nv0.0.1\n\nJSON 编辑器\n时间戳转换\nUUID 生成器\n文本代码对比\nURL 编解码\n计算稿纸\n文本代码对比\nText\nJSON\nYAML\nGo\n重新格式化\n排序左右内容\n清除全部\n共 1 行\n新增 0\n删除 0\n修改 0\n左侧\n右侧\n1\n1\n© 2026 NORNIA TOOLS ARTISAN EDITION\nPRIVACY POLICY\nTERMS OF SERVICE\nCHANGELOG",
+  "errors": []
+ },
+ "diff-390": {
+  "title": "Nornia Tools",
+  "text": "Nornia Tools\n文本代码对比\nText\nJSON\nYAML\nGo\n重新格式化\n排序左右内容\n清除全部\n共 1 行\n新增 0\n删除 0\n修改 0\n左侧\n右侧\n1\n1\n© 2026 NORNIA TOOLS ARTISAN EDITION\nPRIVACY POLICY\nTERMS OF SERVICE\nCHANGELOG",
+  "errors": []
+ },
+ "url-1440": {
+  "title": "Nornia Tools",
+  "text": "Nornia Tools\n\nv0.0.1\n\nJSON 编辑器\n时间戳转换\nUUID 生成器\n文本代码对比\nURL 编解码\n计算稿纸\nURL 编解码\n自动\n编码\n解码\n清除全部\n输入\n结果\n复制结果\n输入后将实时显示结果。\n© 2026 NORNIA TOOLS ARTISAN EDITION\nPRIVACY POLICY\nTERMS OF SERVICE\nCHANGELOG",
+  "errors": []
+ },
+ "url-390": {
+  "title": "Nornia Tools",
+  "text": "Nornia Tools\nURL 编解码\n自动\n编码\n解码\n清除全部\n输入\n结果\n复制结果\n输入后将实时显示结果。\n© 2026 NORNIA TOOLS ARTISAN EDITION\nPRIVACY POLICY\nTERMS OF SERVICE\nCHANGELOG",
+  "errors": []
+ },
+ "calculator-1440": {
+  "title": "Nornia Tools",
+  "text": "Nornia Tools\n\nv0.0.1\n\nJSON 编辑器\n时间戳转换\nUUID 生成器\n文本代码对比\nURL 编解码\n计算稿纸\n计算稿纸\n清空全部\n计算草稿\n01\n结果\n=\n© 2026 NORNIA TOOLS ARTISAN EDITION\nPRIVACY POLICY\nTERMS OF SERVICE\nCHANGELOG",
+  "errors": []
+ },
+ "calculator-390": {
+  "title": "Nornia Tools",
+  "text": "Nornia Tools\n计算稿纸\n清空全部\n计算草稿\n01\n结果\n=\n© 2026 NORNIA TOOLS ARTISAN EDITION\nPRIVACY POLICY\nTERMS OF SERVICE\nCHANGELOG",
+  "errors": []
+ }
+}

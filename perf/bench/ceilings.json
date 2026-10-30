@@ -1,0 +1,16 @@
+{
+ "home::ready_p75": 2142.1,
+ "home::bytes_total_p75": 684160.0,
+ "json::ready_p75": 2233.3,
+ "json::bytes_total_p75": 684160.0,
+ "timestamp::ready_p75": 1969.8,
+ "timestamp::bytes_total_p75": 684160.0,
+ "uuid::ready_p75": 2128.0,
+ "uuid::bytes_total_p75": 684160.0,
+ "diff::ready_p75": 5686.9,
+ "diff::bytes_total_p75": 1744865.0,
+ "url::ready_p75": 2060.5,
+ "url::bytes_total_p75": 684160.0,
+ "calculator::ready_p75": 2064.3,
+ "calculator::bytes_total_p75": 684160.0
+}
