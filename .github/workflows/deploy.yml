@@ -172,3 +172,70 @@ jobs:
           fingerprint: ${{ secrets.VPS_SSH_FINGERPRINT }}
           command_timeout: 2m
           script: ci-public-check
+      - name: Purge Cloudflare cache
+        if: steps.ssh.outcome == 'success'
+        continue-on-error: true
+        uses: actions/github-script@v9
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+        with:
+          script: |
+            try {
+              if (!process.env.CF_API_TOKEN || !process.env.CF_ZONE_ID) {
+                throw new Error('缺少 production Secret: CF_API_TOKEN 或 CF_ZONE_ID');
+              }
+              const paths = ['/', '/json', '/timestamp', '/uuid', '/text-code-diff',
+                '/url-codec', '/calculator', '/robots.txt', '/sitemap.xml', '/icon.svg', '/opengraph-image', '/indexnow.txt'];
+              const response = await fetch(`https://api.cloudflare.com/client/v4/zones/${process.env.CF_ZONE_ID}/purge_cache`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${process.env.CF_API_TOKEN}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ files: paths.map(path => `https://tools.nornia.top${path}`) }),
+                signal: AbortSignal.timeout(30000),
+              });
+              const result = await response.json();
+              if (!response.ok || result.success !== true) {
+                throw new Error(`Cloudflare 清缓存失败（HTTP ${response.status}）`);
+              }
+              core.info('已请求清除站点入口、工具页和 SEO 资源缓存');
+            } catch (error) {
+              core.warning(error instanceof Error ? error.message : 'Cloudflare 清缓存失败');
+            }
+      - name: Notify IndexNow
+        if: steps.ssh.outcome == 'success'
+        continue-on-error: true
+        uses: actions/github-script@v9
+        with:
+          script: |
+            try {
+              const origin = 'https://tools.nornia.top';
+              const keyLocation = `${origin}/indexnow.txt`;
+              const keyResponse = await fetch(keyLocation, { signal: AbortSignal.timeout(30000) });
+              if (!keyResponse.ok) throw new Error(`读取 IndexNow 验证文件失败（HTTP ${keyResponse.status}）`);
+              const key = (await keyResponse.text()).trim();
+              if (!/^[a-f0-9]{32}$/.test(key)) throw new Error('IndexNow 验证文件格式不正确');
+              const sitemapResponse = await fetch(`${origin}/sitemap.xml`, { signal: AbortSignal.timeout(30000) });
+              if (!sitemapResponse.ok) throw new Error(`读取 sitemap 失败（HTTP ${sitemapResponse.status}）`);
+              const sitemap = await sitemapResponse.text();
+              const urlList = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => {
+                const url = new URL(match[1]);
+                if (url.origin !== origin) throw new Error('sitemap 包含站点之外的网址');
+                return url.href;
+              });
+              if (!urlList.length) throw new Error('sitemap 中没有可提交的网址');
+              const response = await fetch('https://api.indexnow.org/indexnow', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                body: JSON.stringify({ host: new URL(origin).host, key, keyLocation, urlList }),
+                signal: AbortSignal.timeout(30000),
+              });
+              if (response.status === 200) {
+                core.info(`IndexNow 已接收 ${urlList.length} 个网址，不代表已收录`);
+              } else if (response.status === 202) {
+                core.warning('IndexNow 已接收请求，网站密钥仍待验证');
+              } else {
+                throw new Error(`IndexNow 提交失败（HTTP ${response.status}）`);
+              }
+            } catch (error) {
+              core.warning(error instanceof Error ? error.message : 'IndexNow 提交失败');
+            }

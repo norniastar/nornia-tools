@@ -409,10 +409,10 @@ const TimestampTool = () => {
                   <div className="w-12 h-8 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
                     {getRowLabel('01', index)}
                   </div>
-                  <div className="flex-1 flex flex-col">
+                  <div className="flex-1 flex flex-col max-sm:min-w-0">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">日期 → 时间戳</label>
-                    <div className="flex items-center gap-6">
-                      <div className="flex-1 max-w-md">
+                    <div className="flex items-center gap-6 max-sm:flex-wrap">
+                      <div className="flex-1 max-w-md max-sm:basis-full max-sm:min-w-0 max-sm:[&_input]:min-w-0">
                         <DateTimePicker 
                           value={row.input}
                           onChange={(value) => handleDateToTsChange(row.id, value)}
@@ -470,10 +470,10 @@ const TimestampTool = () => {
                   <div className="w-12 h-8 rounded-md bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs group-focus-within:bg-blue-50 group-focus-within:text-[#0057c1] transition-colors">
                     {getRowLabel('02', index)}
                   </div>
-                  <div className="flex-1 flex flex-col">
+                  <div className="flex-1 flex flex-col max-sm:min-w-0">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">时间戳 → 日期</label>
-                    <div className="flex items-center gap-6">
-                      <div className="flex-1 max-w-md">
+                    <div className="flex items-center gap-6 max-sm:flex-wrap">
+                      <div className="flex-1 max-w-md max-sm:basis-full max-sm:min-w-0 max-sm:[&_input]:min-w-0">
                         <div className="flex items-center gap-2 rounded-lg bg-white border border-slate-200 p-3 focus-within:border-[#4e45e4] focus-within:ring-1 focus-within:ring-[#4e45e4]/20 transition-all">
                           <input 
                             type="text"

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowUpAZ, FileDiff, RefreshCw, Trash2 } from 'lucide-react';
 import { DiffEditor } from '@monaco-editor/react';
+import type { editor } from 'monaco-editor';
 import '../utils/monacoSetup';
 import YAML from 'yaml';
 import Tooltip from './Tooltip';
@@ -201,7 +202,7 @@ const TextCodeDiffTool = () => {
   const [summary, setSummary] = useState<DiffSummary>(createEmptySummary);
   const [statusMessage, setStatusMessage] = useState('共 1 行');
   const [statusTone, setStatusTone] = useState<'info' | 'error'>('info');
-  const diffEditorRef = useRef<any>(null);
+  const diffEditorRef = useRef<editor.IStandaloneDiffEditor | null>(null);
   const leftEditorRef = useRef<any>(null);
   const rightEditorRef = useRef<any>(null);
   const isApplyingProgrammaticChange = useRef(false);
@@ -217,6 +218,18 @@ const TextCodeDiffTool = () => {
     }),
     [language, leftInput, rightInput]
   );
+
+  useEffect(() => () => {
+    const editor = diffEditorRef.current;
+    const models = editor?.getModel();
+    // 先解除编辑器对模型的引用，再释放模型，避免卸载时访问已释放的模型
+    editor?.setModel(null);
+    models?.original.dispose();
+    models?.modified.dispose();
+    diffEditorRef.current = null;
+    leftEditorRef.current = null;
+    rightEditorRef.current = null;
+  }, []);
 
   useEffect(() => {
     persistDraft(draftState, Boolean(leftInput || rightInput));
@@ -473,6 +486,8 @@ const TextCodeDiffTool = () => {
           language={getMonacoLanguage(language)}
           original={cachedDraft.leftInput}
           modified={cachedDraft.rightInput}
+          keepCurrentOriginalModel
+          keepCurrentModifiedModel
           onMount={handleEditorMount}
           options={editorOptions}
           loading={<div className="h-full flex items-center justify-center text-sm text-slate-400">正在加载 Monaco 编辑器…</div>}

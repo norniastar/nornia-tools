@@ -35,6 +35,14 @@ Compose 的 `NORNIA_IMAGE` 由脚本传入，请勿绕过脚本直接执行 `doc
 
 创建 Environment `production`，仅允许 main，若需要完全自动部署则不设置人工审批。
 Environment Secrets：`VPS_HOST`、`VPS_USER`（deploy）、`VPS_SSH_KEY`、`VPS_SSH_FINGERPRINT`。
+另外配置 `CF_API_TOKEN`（仅授予 `nornia.top` Zone 的 `Cache Purge` 权限）和
+`CF_ZONE_ID`（`nornia.top` 的 Zone ID）。公网检查通过后，工作流清除首页、六个工具页、
+robots.txt、sitemap.xml、icon.svg、opengraph-image 和 indexnow.txt 的缓存；缺少配置或清除失败只产生警告，
+不影响部署结果。启用 HTML 边缘缓存前，应先确认该步骤已成功执行。
+清缓存后，`Notify IndexNow` 从线上 sitemap 读取网址，并通知 IndexNow 参与的搜索引擎。
+`public/indexnow.txt` 是必须随站点公开发布的所有权验证文件，不是账号登录凭据，
+无需新增 Secret。首次发布前不能完成线上验证；HTTP 200 表示已接收，202 表示密钥待验证，
+均不代表收录。验证文件缺失或通知失败只发出警告，不影响部署结果。
 固定 SSH 端口为 57622；主机指纹必须通过可信管理连接核验，不能以 ssh-keyscan 的结果直接建立信任。
 
 Actions 使用 `GITHUB_TOKEN` 推送镜像。私有镜像的 VPS 拉取使用 root Docker 配置中独立的
