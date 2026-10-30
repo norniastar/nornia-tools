@@ -21,9 +21,11 @@ import {
   parseJsonPreservingNumbers,
   stringifyJsonPreservingNumbers,
 } from '../utils/losslessJson';
-import { jsonBinaryOp, rewriteJsonFilterArithmetic } from '../utils/jsonFilterArithmetic';
 
 const JSON_EDITOR_CACHE_KEY = 'json_editor_draft';
+
+// 过滤用到的 Babel 体积大，只在用过滤时才加载
+const loadFilterArithmetic = () => import('../utils/jsonFilterArithmetic');
 
 // --- Sub-component ---
 
@@ -166,7 +168,8 @@ const JSONEditorTool = () => {
   }, [persistDraft, draftState, code, filter]);
 
   useEffect(() => {
-    const applyFilter = () => {
+    let cancelled = false;
+    const applyFilter = async () => {
       const trimmedFilter = filter.trim();
       if (!trimmedFilter) {
         setResultCode('');
@@ -193,6 +196,8 @@ const JSONEditorTool = () => {
           executableCode = `return (${executableCode})`;
         }
 
+        const { jsonBinaryOp, rewriteJsonFilterArithmetic } = await loadFilterArithmetic();
+        if (cancelled) return;
         const transformedCode = rewriteJsonFilterArithmetic(executableCode);
 
         const filterFn = new Function('data', '__jsonBinaryOp', `
@@ -215,12 +220,16 @@ const JSONEditorTool = () => {
 
         setResultCode(stringifyJsonPreservingNumbers(result, 2));
       } catch (err: any) {
+        if (cancelled) return;
         setResultCode(`// ${err.message}`);
       }
     };
 
     const timer = setTimeout(applyFilter, 100);
-    return () => clearTimeout(timer);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, [code, filter]);
 
   const reformat = () => {
@@ -357,6 +366,7 @@ const JSONEditorTool = () => {
           type="text" 
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
+          onFocus={() => void loadFilterArithmetic()}
           placeholder={`示例: ${EXAMPLE_FILTER}`}
           className="flex-1 bg-white border-none rounded-md px-4 py-2 text-xs font-mono focus:ring-1 focus:ring-[#0057c1] placeholder:text-slate-400"
         />

@@ -77,7 +77,16 @@ async def smoke(browser, base):
         await page.get_by_role("button", name="重新格式化").click() if await page.get_by_role("button", name="重新格式化").count() else None
         await page.wait_for_timeout(300)
         txt = await page.evaluate("document.querySelector('.ace_content').innerText")
-        return True if "12345678901234567890" in txt else f"json 内容不对: {txt[:80]}"
+        if "12345678901234567890" not in txt:
+            return f"json 内容不对: {txt[:80]}"
+        # 过滤表达式：属性访问 + 算术改写（走 Babel）+ 大数不丢精度
+        for expr, want in [(".a.length", "3"), (".b * 10 + 0.5", "10.5"), (".a[2]", "12345678901234567890")]:
+            await page.fill('main input[placeholder^="示例"]', expr)
+            await page.wait_for_timeout(1500)
+            out = await page.evaluate("[...document.querySelectorAll('.ace_content')].pop().innerText")
+            if out.strip() != want:
+                return f"过滤 {expr} 结果 {out!r}，期望 {want!r}"
+        return True
 
     async def timestamp_tool(page):
         sel = 'main input[placeholder="请输入时间戳"]'
