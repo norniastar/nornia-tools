@@ -84,7 +84,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     id: 'calculator',
     slug: 'calculator',
     name: '计算稿纸',
-    description: '反应式数学笔记本。编写逻辑，即时查看结果。支持变量定义。',
+    description: '反应式数学笔记本。编写表达式，即时查看结果。',
     icon: Calculator,
     seoTitle: '在线计算稿纸 - 多行表达式计算器',
     seoDescription:
