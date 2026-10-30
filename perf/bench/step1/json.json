@@ -1,0 +1,855 @@
+{
+ "started": "2026-10-30 01:41:19",
+ "finished": "2026-10-30 01:42:18",
+ "config": {
+  "runs": 10,
+  "profile": "fast4g",
+  "cpu": 1,
+  "width": 1440,
+  "height": 900,
+  "ready": "!!document.querySelector('.ace_editor .ace_text-input') && !!document.querySelector('.ace_editor .ace_line')",
+  "type_check": null
+ },
+ "paired": true,
+ "results": {
+  "A": {
+   "url": "http://127.0.0.1:8080/#/json",
+   "summary": {
+    "n": 10,
+    "n_ok": 10,
+    "ready": {
+     "p50": 2129.2,
+     "p75": 2507.6,
+     "p95": 2661.6
+    },
+    "lcp": {
+     "p50": 2388.0,
+     "p75": 2805.0,
+     "p95": 2917.8
+    },
+    "fcp": {
+     "p50": 2016.0,
+     "p75": 2406.0,
+     "p95": 2540.4
+    },
+    "dcl": {
+     "p50": 1900.0,
+     "p75": 2176.5,
+     "p95": 2289.6
+    },
+    "load": {
+     "p50": 1902.5,
+     "p75": 2179.8,
+     "p95": 2293.0
+    },
+    "longtask": {
+     "p50": 639.0,
+     "p75": 999.5,
+     "p95": 1112.8
+    },
+    "requests": {
+     "p50": 5.0,
+     "p75": 5.0,
+     "p95": 5.0
+    },
+    "bytes_total": {
+     "p50": 684160.0,
+     "p75": 684160.0,
+     "p95": 684160.0
+    }
+   },
+   "runs": [
+    {
+     "url": "http://127.0.0.1:8080/#/json",
+     "ok": true,
+     "ready": 2706.4000000059605,
+     "lcp": 2952,
+     "longtask": 1099,
+     "fcp": 2580,
+     "dcl": 2354.7000000029802,
+     "load": 2355.9000000059605,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 2565
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1559
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 449
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 271
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/json",
+     "ok": true,
+     "ready": 1963.6000000089407,
+     "lcp": 2260,
+     "longtask": 511,
+     "fcp": 1896,
+     "dcl": 1781.4000000059605,
+     "load": 1783.4000000059605,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 1946
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1397
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 150
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 149
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/json",
+     "ok": true,
+     "ready": 1789.4000000059605,
+     "lcp": 2032,
+     "longtask": 300,
+     "fcp": 1740,
+     "dcl": 1670.5,
+     "load": 1672,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 1748
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1404
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 163
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 139
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/json",
+     "ok": true,
+     "ready": 1895.2000000029802,
+     "lcp": 2144,
+     "longtask": 406,
+     "fcp": 1844,
+     "dcl": 1752.4000000059605,
+     "load": 1754.6000000089407,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 1865
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1390
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 146
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 140
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/json",
+     "ok": true,
+     "ready": 2145.3999999910593,
+     "lcp": 2400,
+     "longtask": 579,
+     "fcp": 2044,
+     "dcl": 1937.0999999940395,
+     "load": 1939.3999999910593,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 2101
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1468
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 167
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 158
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/json",
+     "ok": true,
+     "ready": 2606.9000000059605,
+     "lcp": 2876,
+     "longtask": 1124,
+     "fcp": 2492,
+     "dcl": 2210.0999999940395,
+     "load": 2216.0999999940395,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 2493
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1439
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 154
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 128
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/json",
+     "ok": true,
+     "ready": 2513.4000000059605,
+     "lcp": 2820,
+     "longtask": 1009,
+     "fcp": 2440,
+     "dcl": 2206.5,
+     "load": 2209.4000000059605,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 2448
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1494
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 264
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 217
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/json",
+     "ok": true,
+     "ready": 1830.5999999940395,
+     "lcp": 2064,
+     "longtask": 316,
+     "fcp": 1800,
+     "dcl": 1708.0999999940395,
+     "load": 1709.7999999970198,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 1816
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1388
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 201
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 123
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/json",
+     "ok": true,
+     "ready": 2113,
+     "lcp": 2376,
+     "longtask": 699,
+     "fcp": 1988,
+     "dcl": 1863,
+     "load": 1865.6000000089407,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 2017
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1387
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 140
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 138
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/json",
+     "ok": true,
+     "ready": 2490,
+     "lcp": 2760,
+     "longtask": 971,
+     "fcp": 2304,
+     "dcl": 2086.5,
+     "load": 2090.7999999970198,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 2319
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1453
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 367
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 165
+      }
+     ]
+    }
+   ]
+  },
+  "B": {
+   "url": "http://127.0.0.1:8081/#/json",
+   "summary": {
+    "n": 10,
+    "n_ok": 10,
+    "ready": {
+     "p50": 1942.6,
+     "p75": 1984.8,
+     "p95": 2057.0
+    },
+    "lcp": {
+     "p50": 1882.0,
+     "p75": 1972.0,
+     "p95": 2101.4
+    },
+    "fcp": {
+     "p50": 698.0,
+     "p75": 734.0,
+     "p95": 748.4
+    },
+    "dcl": {
+     "p50": 458.6,
+     "p75": 470.7,
+     "p95": 510.5
+    },
+    "load": {
+     "p50": 459.1,
+     "p75": 471.5,
+     "p95": 515.8
+    },
+    "longtask": {
+     "p50": 471.0,
+     "p75": 548.0,
+     "p95": 742.5
+    },
+    "requests": {
+     "p50": 12.0,
+     "p75": 12.0,
+     "p95": 12.0
+    },
+    "bytes_total": {
+     "p50": 638530.0,
+     "p75": 638530.0,
+     "p95": 638530.0
+    }
+   },
+   "runs": [
+    {
+     "url": "http://127.0.0.1:8081/#/json",
+     "ok": true,
+     "ready": 1969,
+     "lcp": 1904,
+     "longtask": 457,
+     "fcp": 584,
+     "dcl": 442.6000000089407,
+     "load": 443.5,
+     "requests": 12,
+     "bytes_total": 638530,
+     "bytes_by_type": {
+      "script": 623390,
+      "link": 14441,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-BXMBeH4_.js",
+       "responseEnd": 1555
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 607
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-UbnbJltZ.css",
+       "responseEnd": 584
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-2n66qArx.js",
+       "responseEnd": 556
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useToolDraft-KQgcu_5I.js",
+       "responseEnd": 551
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/json",
+     "ok": true,
+     "ready": 2030.2000000029802,
+     "lcp": 1984,
+     "longtask": 552,
+     "fcp": 752,
+     "dcl": 518.4000000059605,
+     "load": 527.9000000059605,
+     "requests": 12,
+     "bytes_total": 638530,
+     "bytes_by_type": {
+      "script": 623390,
+      "link": 14441,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-BXMBeH4_.js",
+       "responseEnd": 1662
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-UbnbJltZ.css",
+       "responseEnd": 700
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 679
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-2n66qArx.js",
+       "responseEnd": 669
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useToolDraft-KQgcu_5I.js",
+       "responseEnd": 661
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/json",
+     "ok": true,
+     "ready": 1665.300000011921,
+     "lcp": 1636,
+     "longtask": 128,
+     "fcp": 508,
+     "dcl": 390.30000001192093,
+     "load": 390.40000000596046,
+     "requests": 12,
+     "bytes_total": 638530,
+     "bytes_by_type": {
+      "script": 623390,
+      "link": 14441,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-BXMBeH4_.js",
+       "responseEnd": 1436
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-UbnbJltZ.css",
+       "responseEnd": 484
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-2n66qArx.js",
+       "responseEnd": 472
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 456
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useToolDraft-KQgcu_5I.js",
+       "responseEnd": 455
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/json",
+     "ok": true,
+     "ready": 1679.0999999940395,
+     "lcp": 1644,
+     "longtask": 276,
+     "fcp": 528,
+     "dcl": 365.79999999701977,
+     "load": 366,
+     "requests": 12,
+     "bytes_total": 638530,
+     "bytes_by_type": {
+      "script": 623390,
+      "link": 14441,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-BXMBeH4_.js",
+       "responseEnd": 1418
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-UbnbJltZ.css",
+       "responseEnd": 477
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 460
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-2n66qArx.js",
+       "responseEnd": 436
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useCopyFeedback-4_lcpf9b.js",
+       "responseEnd": 435
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/json",
+     "ok": true,
+     "ready": 2078.9000000059605,
+     "lcp": 2020,
+     "longtask": 815,
+     "fcp": 700,
+     "dcl": 463.29999999701977,
+     "load": 463.70000000298023,
+     "requests": 12,
+     "bytes_total": 638530,
+     "bytes_by_type": {
+      "script": 623390,
+      "link": 14441,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-BXMBeH4_.js",
+       "responseEnd": 1543
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 587
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-UbnbJltZ.css",
+       "responseEnd": 576
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useCopyFeedback-4_lcpf9b.js",
+       "responseEnd": 549
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-2n66qArx.js",
+       "responseEnd": 549
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/json",
+     "ok": true,
+     "ready": 1896.2000000029802,
+     "lcp": 1824,
+     "longtask": 536,
+     "fcp": 728,
+     "dcl": 461.79999999701977,
+     "load": 462.20000000298023,
+     "requests": 12,
+     "bytes_total": 638530,
+     "bytes_by_type": {
+      "script": 623390,
+      "link": 14441,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-BXMBeH4_.js",
+       "responseEnd": 1534
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-UbnbJltZ.css",
+       "responseEnd": 590
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 580
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-2n66qArx.js",
+       "responseEnd": 560
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useToolDraft-KQgcu_5I.js",
+       "responseEnd": 537
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/json",
+     "ok": true,
+     "ready": 1967.800000011921,
+     "lcp": 1936,
+     "longtask": 442,
+     "fcp": 744,
+     "dcl": 473.20000000298023,
+     "load": 474.1000000089407,
+     "requests": 12,
+     "bytes_total": 638530,
+     "bytes_by_type": {
+      "script": 623390,
+      "link": 14441,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-BXMBeH4_.js",
+       "responseEnd": 1563
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/Tooltip-BI9k80eN.js",
+       "responseEnd": 765
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 624
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-UbnbJltZ.css",
+       "responseEnd": 610
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-2n66qArx.js",
+       "responseEnd": 599
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/json",
+     "ok": true,
+     "ready": 1719.2999999970198,
+     "lcp": 1696,
+     "longtask": 258,
+     "fcp": 556,
+     "dcl": 428.6000000089407,
+     "load": 429.40000000596046,
+     "requests": 12,
+     "bytes_total": 638530,
+     "bytes_by_type": {
+      "script": 623390,
+      "link": 14441,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-BXMBeH4_.js",
+       "responseEnd": 1483
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-UbnbJltZ.css",
+       "responseEnd": 530
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 510
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-2n66qArx.js",
+       "responseEnd": 495
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useCopyFeedback-4_lcpf9b.js",
+       "responseEnd": 491
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/json",
+     "ok": true,
+     "ready": 1990.1000000089407,
+     "lcp": 2168,
+     "longtask": 654,
+     "fcp": 696,
+     "dcl": 455.5,
+     "load": 455.90000000596046,
+     "requests": 12,
+     "bytes_total": 638530,
+     "bytes_by_type": {
+      "script": 623390,
+      "link": 14441,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-BXMBeH4_.js",
+       "responseEnd": 1607
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/Tooltip-BI9k80eN.js",
+       "responseEnd": 811
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 725
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-UbnbJltZ.css",
+       "responseEnd": 646
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-2n66qArx.js",
+       "responseEnd": 611
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/json",
+     "ok": true,
+     "ready": 1917.3999999910593,
+     "lcp": 1860,
+     "longtask": 485,
+     "fcp": 736,
+     "dcl": 500.8999999910593,
+     "load": 501.09999999403954,
+     "requests": 12,
+     "bytes_total": 638530,
+     "bytes_by_type": {
+      "script": 623390,
+      "link": 14441,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-BXMBeH4_.js",
+       "responseEnd": 1619
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 758
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/JSONEditorTool-UbnbJltZ.css",
+       "responseEnd": 667
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-2n66qArx.js",
+       "responseEnd": 607
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useToolDraft-KQgcu_5I.js",
+       "responseEnd": 602
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "ready_p75_reduction": 0.2085
+}

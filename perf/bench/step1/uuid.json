@@ -1,0 +1,855 @@
+{
+ "started": "2026-10-30 01:43:08",
+ "finished": "2026-10-30 01:43:52",
+ "config": {
+  "runs": 10,
+  "profile": "fast4g",
+  "cpu": 1,
+  "width": 1440,
+  "height": 900,
+  "ready": "/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}/.test(document.querySelector('main')?.innerText || '')",
+  "type_check": null
+ },
+ "paired": true,
+ "results": {
+  "A": {
+   "url": "http://127.0.0.1:8080/#/uuid",
+   "summary": {
+    "n": 10,
+    "n_ok": 10,
+    "ready": {
+     "p50": 1950.2,
+     "p75": 2067.8,
+     "p95": 2218.0
+    },
+    "lcp": {
+     "p50": 2018.0,
+     "p75": 2134.0,
+     "p95": 2270.2
+    },
+    "fcp": {
+     "p50": 1902.0,
+     "p75": 2049.0,
+     "p95": 2179.6
+    },
+    "dcl": {
+     "p50": 1822.6,
+     "p75": 1929.1,
+     "p95": 2018.6
+    },
+    "load": {
+     "p50": 1832.7,
+     "p75": 1931.4,
+     "p95": 2021.5
+    },
+    "longtask": {
+     "p50": 385.5,
+     "p75": 519.0,
+     "p95": 603.9
+    },
+    "requests": {
+     "p50": 5.0,
+     "p75": 5.0,
+     "p95": 5.0
+    },
+    "bytes_total": {
+     "p50": 684160.0,
+     "p75": 684160.0,
+     "p95": 684160.0
+    }
+   },
+   "runs": [
+    {
+     "url": "http://127.0.0.1:8080/#/uuid",
+     "ok": true,
+     "ready": 1871.0999999940395,
+     "lcp": 1892,
+     "longtask": 359,
+     "fcp": 1860,
+     "dcl": 1750.199999988079,
+     "load": 1751.3999999910593,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 1853
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1413
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 288
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 179
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/uuid",
+     "ok": true,
+     "ready": 1961.0999999940395,
+     "lcp": 2000,
+     "longtask": 350,
+     "fcp": 1900,
+     "dcl": 1812.5,
+     "load": 1830.4000000059605,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 1933
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1398
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 151
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 146
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/uuid",
+     "ok": true,
+     "ready": 2267,
+     "lcp": 2308,
+     "longtask": 600,
+     "fcp": 2212,
+     "dcl": 2019.0999999940395,
+     "load": 2022.8999999910593,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 2199
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1446
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 330
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 167
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/uuid",
+     "ok": true,
+     "ready": 1939.2999999970198,
+     "lcp": 1968,
+     "longtask": 387,
+     "fcp": 1904,
+     "dcl": 1832.7999999970198,
+     "load": 1835,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 1914
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1449
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 229
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 213
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/uuid",
+     "ok": true,
+     "ready": 1926.7999999970198,
+     "lcp": 2116,
+     "longtask": 384,
+     "fcp": 1900,
+     "dcl": 1777.7000000029802,
+     "load": 1781.7000000029802,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 1931
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1400
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 157
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 154
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/uuid",
+     "ok": true,
+     "ready": 2009.7000000029802,
+     "lcp": 2036,
+     "longtask": 432,
+     "fcp": 1968,
+     "dcl": 1897.6000000089407,
+     "load": 1899.6000000089407,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 1992
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1400
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 160
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 144
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/uuid",
+     "ok": true,
+     "ready": 1758.4000000059605,
+     "lcp": 1772,
+     "longtask": 241,
+     "fcp": 1740,
+     "dcl": 1674.2999999970198,
+     "load": 1676.7999999970198,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 1745
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1387
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 148
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 133
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/uuid",
+     "ok": true,
+     "ready": 1784.8999999910593,
+     "lcp": 1820,
+     "longtask": 254,
+     "fcp": 1752,
+     "dcl": 1681.5,
+     "load": 1683.8999999910593,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 1763
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1391
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 144
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 136
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/uuid",
+     "ok": true,
+     "ready": 2158.1000000089407,
+     "lcp": 2224,
+     "longtask": 607,
+     "fcp": 2140,
+     "dcl": 2018,
+     "load": 2019.9000000059605,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 2088
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1412
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 237
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 117
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/uuid",
+     "ok": true,
+     "ready": 2087.2000000029802,
+     "lcp": 2140,
+     "longtask": 548,
+     "fcp": 2076,
+     "dcl": 1939.5999999940395,
+     "load": 1942,
+     "requests": 5,
+     "bytes_total": 684160,
+     "bytes_by_type": {
+      "script": 669694,
+      "link": 13768,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 2063
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BWTbsI3p.js",
+       "responseEnd": 1410
+      },
+      {
+       "name": "http://127.0.0.1:8080/assets/index-BiLnRCbs.css",
+       "responseEnd": 151
+      },
+      {
+       "name": "https://static.cloudflareinsights.com/beacon.min.js",
+       "responseEnd": 134
+      }
+     ]
+    }
+   ]
+  },
+  "B": {
+   "url": "http://127.0.0.1:8081/#/uuid",
+   "summary": {
+    "n": 10,
+    "n_ok": 10,
+    "ready": {
+     "p50": 798.1,
+     "p75": 817.7,
+     "p95": 999.9
+    },
+    "lcp": {
+     "p50": 824.0,
+     "p75": 836.0,
+     "p95": 1025.0
+    },
+    "fcp": {
+     "p50": 576.0,
+     "p75": 595.0,
+     "p95": 806.4
+    },
+    "dcl": {
+     "p50": 423.3,
+     "p75": 438.3,
+     "p95": 586.5
+    },
+    "load": {
+     "p50": 423.8,
+     "p75": 439.3,
+     "p95": 587.6
+    },
+    "longtask": {
+     "p50": 127.0,
+     "p75": 165.2,
+     "p95": 309.9
+    },
+    "requests": {
+     "p50": 11.0,
+     "p75": 11.0,
+     "p95": 11.0
+    },
+    "bytes_total": {
+     "p50": 123607.0,
+     "p75": 123607.0,
+     "p95": 123607.0
+    }
+   },
+   "runs": [
+    {
+     "url": "http://127.0.0.1:8081/#/uuid",
+     "ok": true,
+     "ready": 780.2999999970198,
+     "lcp": 796,
+     "longtask": 139,
+     "fcp": 544,
+     "dcl": 422.20000000298023,
+     "load": 422.5,
+     "requests": 11,
+     "bytes_total": 123607,
+     "bytes_by_type": {
+      "script": 115116,
+      "link": 7792,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 494
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/copy-7lavcFFA.js",
+       "responseEnd": 488
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/refresh-cw-DlSs9qX8.js",
+       "responseEnd": 483
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useCopyFeedback-4_lcpf9b.js",
+       "responseEnd": 479
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/ToolPage-dPhwqD4B.js",
+       "responseEnd": 477
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/uuid",
+     "ok": true,
+     "ready": 767.0999999940395,
+     "lcp": 784,
+     "longtask": 0,
+     "fcp": 484,
+     "dcl": 411.09999999403954,
+     "load": 411.29999999701977,
+     "requests": 11,
+     "bytes_total": 123607,
+     "bytes_by_type": {
+      "script": 115116,
+      "link": 7792,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/copy-7lavcFFA.js",
+       "responseEnd": 482
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/refresh-cw-DlSs9qX8.js",
+       "responseEnd": 472
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useCopyFeedback-4_lcpf9b.js",
+       "responseEnd": 472
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 470
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/ToolPage-dPhwqD4B.js",
+       "responseEnd": 466
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/uuid",
+     "ok": true,
+     "ready": 1134.3999999910593,
+     "lcp": 1160,
+     "longtask": 413,
+     "fcp": 972,
+     "dcl": 690.5,
+     "load": 691.8999999910593,
+     "requests": 11,
+     "bytes_total": 123607,
+     "bytes_by_type": {
+      "script": 115116,
+      "link": 7792,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 975
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/copy-7lavcFFA.js",
+       "responseEnd": 842
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/refresh-cw-DlSs9qX8.js",
+       "responseEnd": 838
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useCopyFeedback-4_lcpf9b.js",
+       "responseEnd": 838
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/ToolPage-dPhwqD4B.js",
+       "responseEnd": 797
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/uuid",
+     "ok": true,
+     "ready": 835.5999999940395,
+     "lcp": 860,
+     "longtask": 174,
+     "fcp": 592,
+     "dcl": 435.5,
+     "load": 436.09999999403954,
+     "requests": 11,
+     "bytes_total": 123607,
+     "bytes_by_type": {
+      "script": 115116,
+      "link": 7792,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 559
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/copy-7lavcFFA.js",
+       "responseEnd": 532
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/refresh-cw-DlSs9qX8.js",
+       "responseEnd": 528
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useCopyFeedback-4_lcpf9b.js",
+       "responseEnd": 526
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/ToolPage-dPhwqD4B.js",
+       "responseEnd": 522
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/uuid",
+     "ok": true,
+     "ready": 783.2000000029802,
+     "lcp": 816,
+     "longtask": 124,
+     "fcp": 556,
+     "dcl": 415.40000000596046,
+     "load": 415.6000000089407,
+     "requests": 11,
+     "bytes_total": 123607,
+     "bytes_by_type": {
+      "script": 115116,
+      "link": 7792,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 521
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/copy-7lavcFFA.js",
+       "responseEnd": 493
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/UUIDGeneratorTool-3NPfEm0M.js",
+       "responseEnd": 489
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/refresh-cw-DlSs9qX8.js",
+       "responseEnd": 486
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/ToolPage-dPhwqD4B.js",
+       "responseEnd": 486
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/uuid",
+     "ok": true,
+     "ready": 819,
+     "lcp": 836,
+     "longtask": 184,
+     "fcp": 604,
+     "dcl": 439.20000000298023,
+     "load": 440.40000000596046,
+     "requests": 11,
+     "bytes_total": 123607,
+     "bytes_by_type": {
+      "script": 115116,
+      "link": 7792,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 543
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/copy-7lavcFFA.js",
+       "responseEnd": 522
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/refresh-cw-DlSs9qX8.js",
+       "responseEnd": 520
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useCopyFeedback-4_lcpf9b.js",
+       "responseEnd": 517
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/ToolPage-dPhwqD4B.js",
+       "responseEnd": 514
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/uuid",
+     "ok": true,
+     "ready": 813.6999999880791,
+     "lcp": 836,
+     "longtask": 0,
+     "fcp": 588,
+     "dcl": 459.29999999701977,
+     "load": 460.09999999403954,
+     "requests": 11,
+     "bytes_total": 123607,
+     "bytes_by_type": {
+      "script": 115116,
+      "link": 7792,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 540
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/copy-7lavcFFA.js",
+       "responseEnd": 526
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/refresh-cw-DlSs9qX8.js",
+       "responseEnd": 521
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useCopyFeedback-4_lcpf9b.js",
+       "responseEnd": 520
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/ToolPage-dPhwqD4B.js",
+       "responseEnd": 516
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/uuid",
+     "ok": true,
+     "ready": 767.0999999940395,
+     "lcp": 788,
+     "longtask": 77,
+     "fcp": 536,
+     "dcl": 401.5,
+     "load": 402.09999999403954,
+     "requests": 11,
+     "bytes_total": 123607,
+     "bytes_by_type": {
+      "script": 115116,
+      "link": 7792,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 500
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/copy-7lavcFFA.js",
+       "responseEnd": 488
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/refresh-cw-DlSs9qX8.js",
+       "responseEnd": 487
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useCopyFeedback-4_lcpf9b.js",
+       "responseEnd": 476
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/ToolPage-dPhwqD4B.js",
+       "responseEnd": 468
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/uuid",
+     "ok": true,
+     "ready": 813,
+     "lcp": 832,
+     "longtask": 130,
+     "fcp": 564,
+     "dcl": 424.3999999910593,
+     "load": 425.19999998807907,
+     "requests": 11,
+     "bytes_total": 123607,
+     "bytes_by_type": {
+      "script": 115116,
+      "link": 7792,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 517
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/copy-7lavcFFA.js",
+       "responseEnd": 494
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/refresh-cw-DlSs9qX8.js",
+       "responseEnd": 492
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useCopyFeedback-4_lcpf9b.js",
+       "responseEnd": 489
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/ToolPage-dPhwqD4B.js",
+       "responseEnd": 486
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/uuid",
+     "ok": true,
+     "ready": 774.4000000059605,
+     "lcp": 792,
+     "longtask": 59,
+     "fcp": 596,
+     "dcl": 401.70000000298023,
+     "load": 402.5,
+     "requests": 11,
+     "bytes_total": 123607,
+     "bytes_by_type": {
+      "script": 115116,
+      "link": 7792,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 501
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/copy-7lavcFFA.js",
+       "responseEnd": 493
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/refresh-cw-DlSs9qX8.js",
+       "responseEnd": 481
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/useCopyFeedback-4_lcpf9b.js",
+       "responseEnd": 478
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/ToolPage-dPhwqD4B.js",
+       "responseEnd": 476
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "ready_p75_reduction": 0.6046
+}

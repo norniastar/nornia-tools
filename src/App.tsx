@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ToolId } from './types';
 import { Navbar, Sidebar } from './components/Layout';
@@ -105,7 +105,7 @@ export default function App() {
               transition={{ duration: 0.2 }}
               className="h-full min-h-0"
             >
-              {renderTool()}
+              <Suspense fallback={null}>{renderTool()}</Suspense>
             </motion.div>
           </AnimatePresence>
         </main>

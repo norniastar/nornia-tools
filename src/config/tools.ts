@@ -1,11 +1,14 @@
+import { lazy } from 'react';
 import { Calculator, Clock, Code2, FileDiff, Fingerprint, Home, Link2 } from 'lucide-react';
 import type { ToolDefinition, ToolId } from '../types';
-import JSONEditorTool from '../components/JSONEditorTool';
-import TimestampTool from '../components/TimestampTool';
-import UUIDGeneratorTool from '../components/UUIDGeneratorTool';
-import TextCodeDiffTool from '../components/TextCodeDiffTool';
-import URLCodecTool from '../components/URLCodecTool';
-import CalculatorTool from '../components/CalculatorTool';
+
+// 工具按需加载：打开哪个工具只下载哪个工具的代码
+const JSONEditorTool = lazy(() => import('../components/JSONEditorTool'));
+const TimestampTool = lazy(() => import('../components/TimestampTool'));
+const UUIDGeneratorTool = lazy(() => import('../components/UUIDGeneratorTool'));
+const TextCodeDiffTool = lazy(() => import('../components/TextCodeDiffTool'));
+const URLCodecTool = lazy(() => import('../components/URLCodecTool'));
+const CalculatorTool = lazy(() => import('../components/CalculatorTool'));
 
 export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
