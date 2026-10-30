@@ -1,0 +1,905 @@
+{
+ "started": "2026-10-30 06:18:39",
+ "finished": "2026-10-30 06:20:23",
+ "config": {
+  "runs": 10,
+  "profile": "fast4g",
+  "cpu": 1,
+  "width": 1440,
+  "height": 900,
+  "ready": "document.querySelectorAll('.monaco-diff-editor .view-lines').length >= 2 && !!document.querySelector('.monaco-diff-editor textarea')",
+  "type_check": null
+ },
+ "paired": true,
+ "results": {
+  "A": {
+   "url": "http://127.0.0.1:8080/#/text-code-diff",
+   "summary": {
+    "n": 10,
+    "n_ok": 10,
+    "ready": {
+     "p50": 5020.0,
+     "p75": 5610.1,
+     "p95": 6268.1
+    },
+    "lcp": {
+     "p50": 2298.0,
+     "p75": 2398.0,
+     "p95": 2768.4
+    },
+    "fcp": {
+     "p50": 1978.0,
+     "p75": 2047.0,
+     "p95": 2382.0
+    },
+    "dcl": {
+     "p50": 1850.4,
+     "p75": 1908.0,
+     "p95": 2177.4
+    },
+    "load": {
+     "p50": 1857.1,
+     "p75": 1909.6,
+     "p95": 2180.6
+    },
+    "longtask": {
+     "p50": 1365.5,
+     "p75": 2110.8,
+     "p95": 2710.2
+    },
+    "requests": {
+     "p50": 16.0,
+     "p75": 16.0,
+     "p95": 16.0
+    },
+    "bytes_total": {
+     "p50": 1744865.0,
+     "p75": 1744865.0,
+     "p95": 1744865.0
+    }
+   },
+   "runs": [
+    {
+     "url": "http://127.0.0.1:8080/#/text-code-diff",
+     "ok": true,
+     "ready": 6529.699999988079,
+     "lcp": 2952,
+     "longtask": 2906,
+     "fcp": 2544,
+     "dcl": 2248.899999976158,
+     "load": 2251.7999999821186,
+     "requests": 16,
+     "bytes_total": 1744865,
+     "bytes_by_type": {
+      "script": 1629482,
+      "link": 114685,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor/editor.main.css",
+       "responseEnd": 6325
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor.api-CalNCsUg.js",
+       "responseEnd": 4873
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/basic-languages/monaco.contribution.js",
+       "responseEnd": 3109
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/workers-DcJshg-q.js",
+       "responseEnd": 3107
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/monaco.contribution-D2OdxNBt.js",
+       "responseEnd": 3101
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/text-code-diff",
+     "ok": true,
+     "ready": 5389.799999982119,
+     "lcp": 2100,
+     "longtask": 1822,
+     "fcp": 1860,
+     "dcl": 1785.699999988079,
+     "load": 1788.699999988079,
+     "requests": 16,
+     "bytes_total": 1744865,
+     "bytes_by_type": {
+      "script": 1629482,
+      "link": 114685,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor/editor.main.css",
+       "responseEnd": 4969
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor.api-CalNCsUg.js",
+       "responseEnd": 3875
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/basic-languages/monaco.contribution.js",
+       "responseEnd": 2111
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/monaco.contribution-D2OdxNBt.js",
+       "responseEnd": 2104
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/monaco.contribution-qLAYrEOP.js",
+       "responseEnd": 2091
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/text-code-diff",
+     "ok": true,
+     "ready": 4991.699999988079,
+     "lcp": 2296,
+     "longtask": 1432,
+     "fcp": 1996,
+     "dcl": 1872.800000011921,
+     "load": 1874.9000000059605,
+     "requests": 16,
+     "bytes_total": 1744865,
+     "bytes_by_type": {
+      "script": 1629482,
+      "link": 114685,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor/editor.main.css",
+       "responseEnd": 5009
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor.api-CalNCsUg.js",
+       "responseEnd": 4044
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/basic-languages/monaco.contribution.js",
+       "responseEnd": 2299
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/monaco.contribution-D2OdxNBt.js",
+       "responseEnd": 2282
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/workers-DcJshg-q.js",
+       "responseEnd": 2279
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/text-code-diff",
+     "ok": true,
+     "ready": 4852.600000023842,
+     "lcp": 2300,
+     "longtask": 1139,
+     "fcp": 1960,
+     "dcl": 1755.1000000238419,
+     "load": 1757.7000000178814,
+     "requests": 16,
+     "bytes_total": 1744865,
+     "bytes_by_type": {
+      "script": 1629482,
+      "link": 114685,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor/editor.main.css",
+       "responseEnd": 4886
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor.api-CalNCsUg.js",
+       "responseEnd": 4104
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/basic-languages/monaco.contribution.js",
+       "responseEnd": 2357
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/workers-DcJshg-q.js",
+       "responseEnd": 2356
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/monaco.contribution-D2OdxNBt.js",
+       "responseEnd": 2354
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/text-code-diff",
+     "ok": true,
+     "ready": 5683.5999999940395,
+     "lcp": 2392,
+     "longtask": 2471,
+     "fcp": 2052,
+     "dcl": 1870.800000011921,
+     "load": 1872.800000011921,
+     "requests": 16,
+     "bytes_total": 1744865,
+     "bytes_by_type": {
+      "script": 1629482,
+      "link": 114685,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor/editor.main.css",
+       "responseEnd": 5278
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor.api-CalNCsUg.js",
+       "responseEnd": 4033
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/basic-languages/monaco.contribution.js",
+       "responseEnd": 2282
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/workers-DcJshg-q.js",
+       "responseEnd": 2279
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/monaco.contribution-D2OdxNBt.js",
+       "responseEnd": 2274
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/text-code-diff",
+     "ok": true,
+     "ready": 4813.5,
+     "lcp": 2240,
+     "longtask": 1038,
+     "fcp": 1912,
+     "dcl": 1830,
+     "load": 1832.0999999940395,
+     "requests": 16,
+     "bytes_total": 1744865,
+     "bytes_by_type": {
+      "script": 1629482,
+      "link": 114685,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor/editor.main.css",
+       "responseEnd": 4833
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor.api-CalNCsUg.js",
+       "responseEnd": 4044
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/basic-languages/monaco.contribution.js",
+       "responseEnd": 2279
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/monaco.contribution-D2OdxNBt.js",
+       "responseEnd": 2271
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/workers-DcJshg-q.js",
+       "responseEnd": 2255
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/text-code-diff",
+     "ok": true,
+     "ready": 4470.700000017881,
+     "lcp": 1980,
+     "longtask": 928,
+     "fcp": 1744,
+     "dcl": 1672.5,
+     "load": 1674.2000000178814,
+     "requests": 16,
+     "bytes_total": 1744865,
+     "bytes_by_type": {
+      "script": 1629482,
+      "link": 114685,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor/editor.main.css",
+       "responseEnd": 4506
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor.api-CalNCsUg.js",
+       "responseEnd": 3700
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/workers-DcJshg-q.js",
+       "responseEnd": 1953
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/basic-languages/monaco.contribution.js",
+       "responseEnd": 1952
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/monaco.contribution-D2OdxNBt.js",
+       "responseEnd": 1934
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/text-code-diff",
+     "ok": true,
+     "ready": 5948.300000011921,
+     "lcp": 2544,
+     "longtask": 2207,
+     "fcp": 2184,
+     "dcl": 2090,
+     "load": 2093.5999999940395,
+     "requests": 16,
+     "bytes_total": 1744865,
+     "bytes_by_type": {
+      "script": 1629482,
+      "link": 114685,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor/editor.main.css",
+       "responseEnd": 5836
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor.api-CalNCsUg.js",
+       "responseEnd": 4408
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/basic-languages/monaco.contribution.js",
+       "responseEnd": 2622
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/monaco.contribution-D2OdxNBt.js",
+       "responseEnd": 2610
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/workers-DcJshg-q.js",
+       "responseEnd": 2600
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/text-code-diff",
+     "ok": true,
+     "ready": 4879.799999982119,
+     "lcp": 2400,
+     "longtask": 1262,
+     "fcp": 2032,
+     "dcl": 1919.699999988079,
+     "load": 1921.199999988079,
+     "requests": 16,
+     "bytes_total": 1744865,
+     "bytes_by_type": {
+      "script": 1629482,
+      "link": 114685,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor/editor.main.css",
+       "responseEnd": 4910
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor.api-CalNCsUg.js",
+       "responseEnd": 4075
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/basic-languages/monaco.contribution.js",
+       "responseEnd": 2308
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/monaco.contribution-D2OdxNBt.js",
+       "responseEnd": 2299
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/workers-DcJshg-q.js",
+       "responseEnd": 2298
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8080/#/text-code-diff",
+     "ok": true,
+     "ready": 5048.4000000059605,
+     "lcp": 2292,
+     "longtask": 1299,
+     "fcp": 1960,
+     "dcl": 1816,
+     "load": 1841.4000000059605,
+     "requests": 16,
+     "bytes_total": 1744865,
+     "bytes_by_type": {
+      "script": 1629482,
+      "link": 114685,
+      "xmlhttprequest": 0
+     },
+     "slowest": [
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor/editor.main.css",
+       "responseEnd": 5000
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor.api-CalNCsUg.js",
+       "responseEnd": 4088
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/basic-languages/monaco.contribution.js",
+       "responseEnd": 2281
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/workers-DcJshg-q.js",
+       "responseEnd": 2278
+      },
+      {
+       "name": "https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/monaco.contribution-D2OdxNBt.js",
+       "responseEnd": 2271
+      }
+     ]
+    }
+   ]
+  },
+  "B": {
+   "url": "http://127.0.0.1:8081/#/text-code-diff",
+   "summary": {
+    "n": 10,
+    "n_ok": 10,
+    "ready": {
+     "p50": 3410.6,
+     "p75": 3488.1,
+     "p95": 3565.4
+    },
+    "lcp": {
+     "p50": 3190.0,
+     "p75": 3224.0,
+     "p95": 3378.2
+    },
+    "fcp": {
+     "p50": 596.0,
+     "p75": 707.0,
+     "p95": 805.0
+    },
+    "dcl": {
+     "p50": 405.0,
+     "p75": 443.3,
+     "p95": 463.9
+    },
+    "load": {
+     "p50": 405.5,
+     "p75": 443.8,
+     "p95": 464.2
+    },
+    "longtask": {
+     "p50": 1036.5,
+     "p75": 1155.2,
+     "p95": 1314.0
+    },
+    "requests": {
+     "p50": 13.0,
+     "p75": 13.0,
+     "p95": 13.0
+    },
+    "bytes_total": {
+     "p50": 1221267.0,
+     "p75": 1221267.0,
+     "p95": 1221267.0
+    }
+   },
+   "runs": [
+    {
+     "url": "http://127.0.0.1:8081/#/text-code-diff",
+     "ok": true,
+     "ready": 3418.2999999821186,
+     "lcp": 3180,
+     "longtask": 1027,
+     "fcp": 720,
+     "dcl": 435,
+     "load": 435.59999999403954,
+     "requests": 13,
+     "bytes_total": 1221267,
+     "bytes_by_type": {
+      "script": 1112955,
+      "link": 31160,
+      "xmlhttprequest": 0,
+      "other": 76451
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/editor.worker-DyuDvpVp.js",
+       "responseEnd": 3669
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-YEcaurSn.js",
+       "responseEnd": 2503
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-DbIsBtSc.css",
+       "responseEnd": 615
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 555
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-C1S2p8j_.js",
+       "responseEnd": 523
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/text-code-diff",
+     "ok": true,
+     "ready": 3352.0999999940395,
+     "lcp": 3200,
+     "longtask": 964,
+     "fcp": 728,
+     "dcl": 469.69999998807907,
+     "load": 469.7999999821186,
+     "requests": 13,
+     "bytes_total": 1221267,
+     "bytes_by_type": {
+      "script": 1112955,
+      "link": 31160,
+      "xmlhttprequest": 0,
+      "other": 76451
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/editor.worker-DyuDvpVp.js",
+       "responseEnd": 3603
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-YEcaurSn.js",
+       "responseEnd": 2553
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-DbIsBtSc.css",
+       "responseEnd": 685
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 604
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-C1S2p8j_.js",
+       "responseEnd": 597
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/text-code-diff",
+     "ok": true,
+     "ready": 3496.2000000178814,
+     "lcp": 3288,
+     "longtask": 1171,
+     "fcp": 568,
+     "dcl": 386.5,
+     "load": 387.2000000178814,
+     "requests": 13,
+     "bytes_total": 1221267,
+     "bytes_by_type": {
+      "script": 1112955,
+      "link": 31160,
+      "xmlhttprequest": 0,
+      "other": 76451
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/editor.worker-DyuDvpVp.js",
+       "responseEnd": 3793
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-YEcaurSn.js",
+       "responseEnd": 2468
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 615
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-DbIsBtSc.css",
+       "responseEnd": 566
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-C1S2p8j_.js",
+       "responseEnd": 474
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/text-code-diff",
+     "ok": true,
+     "ready": 3115.300000011921,
+     "lcp": 2968,
+     "longtask": 686,
+     "fcp": 668,
+     "dcl": 423.40000000596046,
+     "load": 423.80000001192093,
+     "requests": 13,
+     "bytes_total": 1221267,
+     "bytes_by_type": {
+      "script": 1112955,
+      "link": 31160,
+      "xmlhttprequest": 0,
+      "other": 76451
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/editor.worker-DyuDvpVp.js",
+       "responseEnd": 3348
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-YEcaurSn.js",
+       "responseEnd": 2458
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-DbIsBtSc.css",
+       "responseEnd": 628
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 550
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-C1S2p8j_.js",
+       "responseEnd": 493
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/text-code-diff",
+     "ok": true,
+     "ready": 3402.9000000059605,
+     "lcp": 3124,
+     "longtask": 1354,
+     "fcp": 868,
+     "dcl": 456.80000001192093,
+     "load": 457.30000001192093,
+     "requests": 13,
+     "bytes_total": 1221267,
+     "bytes_by_type": {
+      "script": 1112955,
+      "link": 31160,
+      "xmlhttprequest": 0,
+      "other": 76451
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/editor.worker-DyuDvpVp.js",
+       "responseEnd": 3695
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-YEcaurSn.js",
+       "responseEnd": 2524
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 653
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-DbIsBtSc.css",
+       "responseEnd": 651
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/refresh-cw-C3hsKbN6.js",
+       "responseEnd": 564
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/text-code-diff",
+     "ok": true,
+     "ready": 3518.5,
+     "lcp": 3224,
+     "longtask": 1108,
+     "fcp": 588,
+     "dcl": 385.89999997615814,
+     "load": 386.39999997615814,
+     "requests": 13,
+     "bytes_total": 1221267,
+     "bytes_by_type": {
+      "script": 1112955,
+      "link": 31160,
+      "xmlhttprequest": 0,
+      "other": 76451
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/editor.worker-DyuDvpVp.js",
+       "responseEnd": 3838
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-YEcaurSn.js",
+       "responseEnd": 2423
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-DbIsBtSc.css",
+       "responseEnd": 571
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 536
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-C1S2p8j_.js",
+       "responseEnd": 475
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/text-code-diff",
+     "ok": true,
+     "ready": 3463.7999999821186,
+     "lcp": 3224,
+     "longtask": 1046,
+     "fcp": 484,
+     "dcl": 373.19999998807907,
+     "load": 373.59999999403954,
+     "requests": 13,
+     "bytes_total": 1221267,
+     "bytes_by_type": {
+      "script": 1112955,
+      "link": 31160,
+      "xmlhttprequest": 0,
+      "other": 76451
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/editor.worker-DyuDvpVp.js",
+       "responseEnd": 3797
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-YEcaurSn.js",
+       "responseEnd": 2404
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-DbIsBtSc.css",
+       "responseEnd": 567
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-C1S2p8j_.js",
+       "responseEnd": 468
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/refresh-cw-C3hsKbN6.js",
+       "responseEnd": 461
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/text-code-diff",
+     "ok": true,
+     "ready": 3603.800000011921,
+     "lcp": 3452,
+     "longtask": 1265,
+     "fcp": 604,
+     "dcl": 446.09999999403954,
+     "load": 446.5,
+     "requests": 13,
+     "bytes_total": 1221267,
+     "bytes_by_type": {
+      "script": 1112955,
+      "link": 31160,
+      "xmlhttprequest": 0,
+      "other": 76451
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/editor.worker-DyuDvpVp.js",
+       "responseEnd": 3990
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-YEcaurSn.js",
+       "responseEnd": 2577
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-DbIsBtSc.css",
+       "responseEnd": 849
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 567
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-C1S2p8j_.js",
+       "responseEnd": 537
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/text-code-diff",
+     "ok": true,
+     "ready": 2994.5999999940395,
+     "lcp": 2864,
+     "longtask": 517,
+     "fcp": 488,
+     "dcl": 369.2000000178814,
+     "load": 369.59999999403954,
+     "requests": 13,
+     "bytes_total": 1221267,
+     "bytes_by_type": {
+      "script": 1112955,
+      "link": 31160,
+      "xmlhttprequest": 0,
+      "other": 76451
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/editor.worker-DyuDvpVp.js",
+       "responseEnd": 3215
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-YEcaurSn.js",
+       "responseEnd": 2382
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-DbIsBtSc.css",
+       "responseEnd": 525
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-C1S2p8j_.js",
+       "responseEnd": 448
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 442
+      }
+     ]
+    },
+    {
+     "url": "http://127.0.0.1:8081/#/text-code-diff",
+     "ok": true,
+     "ready": 2964.100000023842,
+     "lcp": 2812,
+     "longtask": 541,
+     "fcp": 488,
+     "dcl": 361.7000000178814,
+     "load": 361.90000000596046,
+     "requests": 13,
+     "bytes_total": 1221267,
+     "bytes_by_type": {
+      "script": 1112955,
+      "link": 31160,
+      "xmlhttprequest": 0,
+      "other": 76451
+     },
+     "slowest": [
+      {
+       "name": "http://127.0.0.1:8081/assets/editor.worker-DyuDvpVp.js",
+       "responseEnd": 3195
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-YEcaurSn.js",
+       "responseEnd": 2368
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/TextCodeDiffTool-DbIsBtSc.css",
+       "responseEnd": 528
+      },
+      {
+       "name": "https://cloudflareinsights.com/cdn-cgi/rum",
+       "responseEnd": 444
+      },
+      {
+       "name": "http://127.0.0.1:8081/assets/trash-2-C1S2p8j_.js",
+       "responseEnd": 435
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "ready_p75_reduction": 0.3782
+}
